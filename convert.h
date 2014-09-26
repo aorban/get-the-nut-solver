@@ -1,6 +1,8 @@
 #ifndef GTN_CONVERT_H_
 #define GTN_CONVERT_H_
 
+#include <string.h>
+
 static char TriToCode(const char *tri) {
   if (strncmp(tri, "ACG", 3) == 0) return 'a';
   if (strncmp(tri, "SQR", 3) == 0) return 'b';

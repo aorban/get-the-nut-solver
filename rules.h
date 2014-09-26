@@ -12,6 +12,7 @@ struct Action {
   unsigned int won : 1;
   unsigned int lost : 1;
   unsigned int continues : 1;
+  unsigned int prio : 2;
 };
 
 class Rules {

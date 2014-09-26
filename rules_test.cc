@@ -23,3 +23,8 @@ TEST(SplitTest, Comma) {
   EXPECT_EQ("   gamma", r[2]);
   EXPECT_EQ("", r[3]);
 }
+
+TEST(RulesTest, Real) {
+  Rules r("rules-real.csv");
+}
+

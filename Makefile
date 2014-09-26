@@ -32,7 +32,7 @@ convert_test.o: convert_test.cc convert.h
 convert_test: convert_test.o $(GTEST)
 	$(LINK) -o $@ $^ $(LDFLAGS)
 
-rules.o: rules.cc rules.h
+rules.o: rules.cc rules.h convert.h
 	$(CXX) $(CCFLAGS) -c $< -o $@
 rules_test.o: rules_test.cc rules.h
 	$(CXX) $(CCFLAGS) -c $< -o $@
