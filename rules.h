@@ -2,6 +2,7 @@
 #define GTN_RULES_H_
 
 #include <string>
+#include <vector>
 
 struct Action {
   unsigned int moving_new_animal : 8;
@@ -32,5 +33,10 @@ class Rules {
   // dim: allat1 x allat2 x relation
   Action rules[NUM_ANIMALS][NUM_ANIMALS][NUM_RELATIONS];
 };
+
+void SplitString(
+    const std::string& s,
+    const std::string& delim,
+    std::vector<std::string> *result);
 
 #endif
