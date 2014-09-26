@@ -13,6 +13,7 @@ struct Action {
   unsigned int lost : 1;
   unsigned int continues : 1;
   unsigned int prio : 2;
+  unsigned int exists : 1;
 };
 
 class Rules {
@@ -22,8 +23,11 @@ class Rules {
   static const int ON = 0;
   static const int AHEAD = 1;
   static const int SIDE = 2;
+
+  // Simple rules without interactions.
+  Rules();
+
   // Reads the rules from a csv file:
-  // TODO(aorban): format desc
   explicit Rules(const std::string& csv_file);
  
   virtual Action GetAction(int moving_animal, int static_animal, int relation) const {
@@ -33,6 +37,8 @@ class Rules {
  private:  
   // dim: allat1 x allat2 x relation
   Action rules[NUM_ANIMALS][NUM_ANIMALS][NUM_RELATIONS];
+
+  void Initialize();
 };
 
 void SplitString(

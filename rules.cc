@@ -29,8 +29,45 @@ void SplitString(const string& s, const string& delim, vector<string> *result) {
     }
 }
 
+void Rules::Initialize() {
+  Action action;
+  action.moving_animal_dies = 0;
+  action.static_animal_dies = 0;
+  action.won = 0;
+  action.lost = 0;
+  action.continues = 0;
+  action.prio = 3;
+  action.exists = 1;
+
+  for (int a1 = 0; a1 < NUM_ANIMALS; ++a1) {
+    for (int a2 = 0; a2 < NUM_ANIMALS; ++a2) {
+      for (int r = 0; r < NUM_RELATIONS; ++r) {
+        if (r != AHEAD) {
+          // No default rule.
+          *((unsigned int *)&(rules[a1][a2][r])) = 0;
+        } else {
+          // AHEAD
+          if (a2 == TriToCode("SWM") - 'a') {
+            // SWAMP
+            *((unsigned int *)&(rules[a1][a2][r])) = 0;
+          } else {
+            // Not SWAMP.
+            action.moving_new_animal = a1;
+            action.static_new_animal = a2;
+            rules[a1][a2][r] = action;
+          }
+        }
+      }
+    }
+  }
+}
+
+Rules::Rules() {
+  Initialize();
+}
+
 Rules::Rules(const std::string& csv_file) {
-  static const int ANIMAL_NUM = TriToCode("END") - 'a';
+  Initialize();
   std::string line;
   ifstream file(csv_file);
   if (!file) {
@@ -44,9 +81,28 @@ Rules::Rules(const std::string& csv_file) {
       cout << "Broken line in csv: " << line;
       exit(2);
     }
+    if (values[1] == "Moving animal") continue;
 
     Action action;
+    action.exists = 1;
     action.prio = atoi(values[6].c_str());
+    action.moving_animal_dies = 0;
+    action.static_animal_dies = 0;
+
+    int animal1 = TriToCode(values[1].c_str()) - 'a';
+    if (animal1 < 0 || animal1 > NUM_ANIMALS) {
+      cout << "Wrong animal1: " << values[1] << '/' << line << endl;
+      exit(3);
+    }
+    action.moving_new_animal = animal1;
+
+    int animal2 = TriToCode(values[2].c_str()) - 'a';
+    if (animal2 < 0 || animal2 > NUM_ANIMALS) {
+      cout << "Wrong animal1: " << values[2] << '/' << line << endl;
+      exit(3);
+    }
+    action.static_new_animal = animal2;
+
     const string a1 = values[4];
     const string a2 = values[5];
     if (a1 == "L" || a2 == "L") action.lost = 1;
@@ -55,7 +111,7 @@ Rules::Rules(const std::string& csv_file) {
       action.moving_animal_dies = 1;
     } else if (a1.length() == 3) {
       char code = TriToCode(a1.c_str()) - 'a';
-      if (code < 0 || code > ANIMAL_NUM) {
+      if (code < 0 || code > NUM_ANIMALS) {
         cout << "Wrong animal target1: " << a1.c_str() << '/' << line << endl;
         exit(4);
       }
@@ -65,25 +121,52 @@ Rules::Rules(const std::string& csv_file) {
       action.static_animal_dies = 1;
     } else if (a2.length() == 3) {
       char code = TriToCode(a2.c_str()) - 'a';
-      if (code < 0 || code > ANIMAL_NUM) {
+      if (code < 0 || code > NUM_ANIMALS) {
         cout << "Wrong animal target2: " << a2.c_str() << '/' << line << endl;
         exit(4);
       }
       action.static_new_animal = code;
     }
 
-
-    if (values[1] == "Moving animal") continue;
-    int animal1 = TriToCode(values[1].c_str()) - 'a';
-    if (animal1 < 0 || animal1 > ANIMAL_NUM) {
-      cout << "Wrong animal1: " << values[1] << '/' << line << endl;
-      exit(3);
+    vector<int> relations;
+    if (values[3] == "ON") {
+      int a = ON; relations.push_back(a);
+    } else if (values[3] == "AHEAD") {
+      int a = AHEAD; relations.push_back(a);
+    } else if (values[3] == "SIDE") {
+      int a = SIDE; relations.push_back(a);
+    } else if (values[3] == "DC") {
+      int a;
+      a = ON; relations.push_back(a);
+      a = AHEAD; relations.push_back(a);
+      a = SIDE; relations.push_back(a);
     }
-    int animal2 = TriToCode(values[2].c_str()) - 'a';
-    if (animal2 < 0 || animal2 > ANIMAL_NUM) {
-      cout << "Wrong animal1: " << values[2] << '/' << line << endl;
-      exit(3);
-    }
 
+    for (vector<int>::const_iterator i = relations.begin();
+         i != relations.end(); ++i) {
+      rules[animal1][animal2][*i] = action;
+    }
+    // Symmetry.
+    if (values[7] == "Y") {
+      {
+        // Swap deaths.
+        int tmp = action.moving_animal_dies;
+        action.moving_animal_dies = action.static_animal_dies;
+        action.static_animal_dies = tmp;
+      }
+      {
+        // Swap new animals.
+        int tmp = action.moving_new_animal;
+        action.moving_new_animal = action.static_new_animal;
+        action.static_new_animal = tmp;
+      }
+      for (vector<int>::const_iterator i = relations.begin();
+           i != relations.end(); ++i) {
+        rules[animal2][animal1][*i] = action;
+      }
+    } else if (values[7] != "N") {
+      cout << "Wrong symmetry: " << values[7] << ':' << line << endl;
+      exit(7);
+    }
   }
 }
