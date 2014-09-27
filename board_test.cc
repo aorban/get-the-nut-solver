@@ -1,6 +1,7 @@
 #include <iostream>
 #include <map>
 
+#include "convert.h"
 #include "board.h"
 #include "rules.h"
 
@@ -194,33 +195,54 @@ class TestableState : public State {
   using State::Erase;
 };
 
+TEST(TestState, TestStatic) {
+  EXPECT_EQ(8, sizeof(long long));    // For hash.
+  EXPECT_LE(6 * State::HASH_SIZE, MAX_TILES) << "Hash won't fit.";
+  EXPECT_LE(BOARD_SIZE - BOARD_X - BOARD_X, 64)
+      << "Position won't fit on 6 bits in Hash().";
+  EXPECT_LE(16, TriToCode("END"))
+      << "Type won't fit on 4 bits in hash.";
+  EXPECT_EQ(BOARD_SIZE, BOARD_X * BOARD_Y);
+  for (int i = 0; i < 4; ++i) {
+    EXPECT_EQ(State::DIRECTIONS[i], -State::DIRECTIONS[OPPOSITE(i)]);
+  }
+}
+
 TEST(TestState, StdHash) {
   std::map<State::HashValue, int, State::CmpByHash> m;
 
   int N = State::HASH_SIZE;
-  long long *h1 = new long long[N];
-  long long *h2 = new long long[N];
+  unsigned long long h1[N];
+  unsigned long long h2[N];
   for(int i = 0; i < N; ++i) {
     h1[i] = i;
     h2[i] = i;
   }
+  EXPECT_FALSE(State::CmpByHash()(h1, h2) || State::CmpByHash()(h2, h1));
   m[h1] = 10;
   EXPECT_EQ(1, m.count(h2));
   h2[N-1] = 99;
+  EXPECT_TRUE(State::CmpByHash()(h1, h2) || State::CmpByHash()(h2, h1));
   EXPECT_EQ(0, m.count(h2));
-  h2[N-1] = 3;
+  h2[N-1] = N-1;
   EXPECT_EQ(1, m.count(h2));
 }
 
-// TEST(TestState, TestStatic) {
-//   EXPECT_EQ(8, sizeof(long long));  // For hash.
-//   EXPECT_LE(10, MAX_TILES);  // If this breaks, Hash() needs to be reconsidered.
-//   EXPECT_LT(BOARD_SIZE, 1 << POSITION_BITS);
-//   EXPECT_EQ(BOARD_SIZE, BOARD_X * BOARD_Y);
-//   for (int i = 0; i < 4; ++i) {
-//     EXPECT_EQ(State::DIRECTIONS[i], -State::DIRECTIONS[OPPOSITE(i)]);
-//   }
-// }
+TEST(TestState, Hash) {
+  int N = State::HASH_SIZE;
+  unsigned long long h1[N];
+  unsigned long long h2[N];
+  TestableState s(B004);
+  s.Hash(h1);
+  s.Hash(h2);
+  EXPECT_FALSE(State::CmpByHash()(h1, h2) || State::CmpByHash()(h2, h1));
+  s.Sort();
+  s.Hash(h2);
+  EXPECT_FALSE(State::CmpByHash()(h1, h2) || State::CmpByHash()(h2, h1));
+  s.Erase(7);
+  s.Hash(h2);
+  EXPECT_TRUE(State::CmpByHash()(h1, h2) || State::CmpByHash()(h2, h1));
+}
 
 // TEST(TestState, ConstructEquality) {
 //   State s002(B002);

@@ -318,12 +318,18 @@ void State::Erase(int tile_index) {
 }
 
 void State::Hash(HashValue hash) const {
-  // long long h = 0;
-  // for (int i = 0; i < num_tiles; ++i) {
-  //   h <<= POSITION_BITS;
-  //   h += t[i];
-  // }
-  // return h;
+  for (int i = 0; i < HASH_SIZE; ++i) hash[i] = 0;
+  int idx_tile = 0;
+  int idx_hash = 0;
+  while (idx_tile < num_tiles) {
+    for (int i = 0; i < 6; ++i) {
+      int local_hash = (t[idx_tile].type << 4) + t[idx_tile].pos - BOARD_X;
+      hash[idx_hash] <<= 10;
+      hash[idx_hash] += local_hash;
+      if (++idx_tile >= num_tiles) break;
+    }
+    ++idx_hash;
+  }
 }
 
 std::string State::GetHistory() const {

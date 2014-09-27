@@ -9,7 +9,7 @@ static const int BOARD_Y = 8;
 static const int BOARD_SIZE = BOARD_X * BOARD_Y;
 static const int TILE_BITS = 16;  // 2^TILE_BITS > BOARD_SIZE
 
-static const int MAX_TILES = 16;
+static const int MAX_TILES = 12;
 
 static const int MAX_HISTORY = 2;  // times 32 moves.
 
@@ -47,8 +47,8 @@ class State {
   static const int LOSE = 1;
   static const int WIN = 2;
 
-  static const int HASH_SIZE = 4;
-  typedef long long *HashValue;
+  static const int HASH_SIZE = 2;
+  typedef unsigned long long *HashValue;
   struct CmpByHash {
     bool operator()(const HashValue& a, const HashValue& b) const {
       for (int i = 0; i < HASH_SIZE; ++i) {
