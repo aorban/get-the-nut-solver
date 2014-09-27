@@ -52,3 +52,10 @@ board_test.o: board_test.cc board.h
 board_test: board_test.o board.o rules.o $(GTEST)
 	$(LINK) -o $@ $^ $(LDFLAGS)
 
+
+################################################################################
+# Misc
+################################################################################
+
+bitfield: bitfield.c
+	$(C) $(CFLAGS) $< -o $@
