@@ -11,8 +11,9 @@ GTEST = ./gtest/src/gtest_main.a
 
 all: test
 
-test: convert_test
+test: convert_test rules_test
 	./convert_test
+	./rules_test
 
 force_look :
 	true
@@ -28,12 +29,15 @@ $(GTEST): force_look
 
 convert_test.o: convert_test.cc convert.h
 	$(CXX) $(CCFLAGS) -c $< -o $@
-
 convert_test: convert_test.o $(GTEST)
 	$(LINK) -o $@ $^ $(LDFLAGS)
 
-rules.o: rules.cc rules.h
+rules.o: rules.cc rules.h convert.h
 	$(CXX) $(CCFLAGS) -c $< -o $@
+rules_test.o: rules_test.cc rules.h
+	$(CXX) $(CCFLAGS) -c $< -o $@
+rules_test: rules_test.o rules.o $(GTEST)
+	$(LINK) -o $@ $^ $(LDFLAGS)
 
 ################################################################################
 # board
