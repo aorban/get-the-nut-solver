@@ -1,5 +1,7 @@
 #include <iostream>
+#include <map>
 
+#include "convert.h"
 #include "board.h"
 #include "rules.h"
 
@@ -47,33 +49,6 @@ class MockRules : public Rules {
       }
     }
   }
-  /*
-  Action GetAction(int m, int s, int r) const {
-    char mo = char(m + 'a');
-    char st = char(s + 'a');
-    Action a;
-    // b does nothing with a, just stops it.
-    if (mo == 'a' && st == 'b') {
-      a.continues = (r != Rules::AHEAD);
-      a.moving_new_animal = m;
-      a.static_new_animal = s;
-    }
-    // c kills a if a moves near it.
-    if (mo == 'a' && st == 'c') {
-      a.continues = 0;
-      a.moving_animal_dies = 1;
-      a.static_new_animal = s;
-    }
-    // d turns 'a' into 'e'
-    if (mo == 'a' && st == 'd') {
-      a.continues = 0;
-      a.moving_animal_dies = 0;
-      a.moving_new_animal = ('e' - 'a');
-      a.static_new_animal = s;
-    }
-    return a;
-  }
-  */
 };
 
 static const Rules *RULES = new MockRules;
@@ -195,15 +170,62 @@ TEST(TestBoard, DebugString) {
 // State
 ////////////////////////////////////////////////////////////////////////////////
 
-// TEST(TestState, TestStatic) {
-//   EXPECT_EQ(8, sizeof(long long));  // For hash.
-//   EXPECT_LE(10, MAX_TILES);  // If this breaks, Hash() needs to be reconsidered.
-//   EXPECT_LT(BOARD_SIZE, 1 << POSITION_BITS);
-//   EXPECT_EQ(BOARD_SIZE, BOARD_X * BOARD_Y);
-//   for (int i = 0; i < 4; ++i) {
-//     EXPECT_EQ(State::DIRECTIONS[i], -State::DIRECTIONS[OPPOSITE(i)]);
-//   }
-// }
+class TestableState : public State {
+ public:
+  explicit TestableState(const char *i) : State(i) {}
+  using State::Find;
+  using State::Sort;
+  using State::Erase;
+};
+
+TEST(TestState, TestStatic) {
+  EXPECT_EQ(8, sizeof(long long));    // For hash.
+  EXPECT_LE(6 * State::HASH_SIZE, MAX_TILES) << "Hash won't fit.";
+  EXPECT_LE(BOARD_SIZE - BOARD_X - BOARD_X, 64)
+      << "Position won't fit on 6 bits in Hash().";
+  EXPECT_LE(16, TriToCode("END"))
+      << "Type won't fit on 4 bits in hash.";
+  EXPECT_EQ(BOARD_SIZE, BOARD_X * BOARD_Y);
+  for (int i = 0; i < 4; ++i) {
+    EXPECT_EQ(State::DIRECTIONS[i], -State::DIRECTIONS[OPPOSITE(i)]);
+  }
+}
+
+TEST(TestState, StdHash) {
+  std::map<State::HashValue, int, State::CmpByHash> m;
+
+  int N = State::HASH_SIZE;
+  unsigned long long h1[N];
+  unsigned long long h2[N];
+  for(int i = 0; i < N; ++i) {
+    h1[i] = i;
+    h2[i] = i;
+  }
+  EXPECT_FALSE(State::CmpByHash()(h1, h2) || State::CmpByHash()(h2, h1));
+  m[h1] = 10;
+  EXPECT_EQ(1, m.count(h2));
+  h2[N-1] = 99;
+  EXPECT_TRUE(State::CmpByHash()(h1, h2) || State::CmpByHash()(h2, h1));
+  EXPECT_EQ(0, m.count(h2));
+  h2[N-1] = N-1;
+  EXPECT_EQ(1, m.count(h2));
+}
+
+TEST(TestState, Hash) {
+  int N = State::HASH_SIZE;
+  unsigned long long h1[N];
+  unsigned long long h2[N];
+  TestableState s(B004);
+  s.Hash(h1);
+  s.Hash(h2);
+  EXPECT_FALSE(State::CmpByHash()(h1, h2) || State::CmpByHash()(h2, h1));
+  s.Sort();
+  s.Hash(h2);
+  EXPECT_FALSE(State::CmpByHash()(h1, h2) || State::CmpByHash()(h2, h1));
+  s.Erase(7);
+  s.Hash(h2);
+  EXPECT_TRUE(State::CmpByHash()(h1, h2) || State::CmpByHash()(h2, h1));
+}
 
 // TEST(TestState, ConstructEquality) {
 //   State s002(B002);
@@ -244,22 +266,37 @@ TEST(TestBoard, DebugString) {
 //   EXPECT_EQ(s007, s009);
 // }
 
-// TEST(TestState, Positions) {
-//   {
-//     TestableState s004(B004);
-//     EXPECT_EQ(s004.Find(POS(1, 5)), 0);
-//     EXPECT_EQ(s004.Find(POS(1, 6)), 1);
-//     EXPECT_EQ(s004.Find(POS(1, 7)), 2);
-//     EXPECT_EQ(s004.Find(POS(1, 4)), -1);
-//   }
-//   {
-//     TestableState s007(B007);
-//     EXPECT_EQ(s007.Find(POS(1, 5)), 2);
-//     EXPECT_EQ(s007.Find(POS(1, 6)), 0);
-//     EXPECT_EQ(s007.Find(POS(1, 7)), 1);
-//     EXPECT_EQ(s007.Find(POS(1, 4)), -1);
-//   }
-// }
+TEST(TestState, Positions_Erase) {
+  TestableState s004(B004);
+  EXPECT_EQ(9, s004.NumTiles());
+  EXPECT_EQ(-1, s004.Find(POS(1, 5)));
+  EXPECT_EQ(0, s004.Find(POS(1, 6)));
+  EXPECT_EQ(3, s004.Find(POS(1, 7)));
+  EXPECT_EQ(6, s004.Find(POS(1, 8)));
+  EXPECT_EQ(1, s004.Find(POS(2, 6)));
+  EXPECT_EQ(4, s004.Find(POS(2, 7)));
+  EXPECT_EQ(7, s004.Find(POS(2, 8)));
+
+  s004.Erase(4);
+  EXPECT_EQ(8, s004.NumTiles());
+  EXPECT_EQ(-1, s004.Find(POS(1, 5)));
+  EXPECT_EQ(0, s004.Find(POS(1, 6)));
+  EXPECT_EQ(3, s004.Find(POS(1, 7)));
+  EXPECT_EQ(5, s004.Find(POS(1, 8)));
+  EXPECT_EQ(1, s004.Find(POS(2, 6)));
+  EXPECT_EQ(-1, s004.Find(POS(2, 7)));
+  EXPECT_EQ(6, s004.Find(POS(2, 8)));
+
+  s004.Erase(1);
+  EXPECT_EQ(7, s004.NumTiles());
+  EXPECT_EQ(-1, s004.Find(POS(1, 5)));
+  EXPECT_EQ(0, s004.Find(POS(1, 6)));
+  EXPECT_EQ(2, s004.Find(POS(1, 7)));
+  EXPECT_EQ(4, s004.Find(POS(1, 8)));
+  EXPECT_EQ(-1, s004.Find(POS(2, 6)));
+  EXPECT_EQ(-1, s004.Find(POS(2, 7)));
+  EXPECT_EQ(5, s004.Find(POS(2, 8)));
+}
 
 // /*
 // TEST(TestState, MoveReturnValue) {
@@ -291,7 +328,7 @@ TEST(TestState, MoveSimple) {
   Board b(B003, *RULES);
   State s(B003);
   // Stops at wall.
-  State n1(b, s, 4, State::DOWN);
+  State n1(b, s, 0, State::DOWN);
   EXPECT_EQ(
     "##########\n"
     "#    c c #\n"
@@ -304,7 +341,7 @@ TEST(TestState, MoveSimple) {
     b.DebugStringWithState(n1));
 
   // c kills it.
-  State n2(b, s, 4, State::UP);
+  State n2(b, s, 0, State::UP);
   EXPECT_EQ(
     "##########\n"
     "#    c c #\n"
@@ -317,7 +354,7 @@ TEST(TestState, MoveSimple) {
     b.DebugStringWithState(n2));
 
   // Stops at b.
-  State n3(b, s, 4, State::LEFT);
+  State n3(b, s, 0, State::LEFT);
   EXPECT_EQ(
     "##########\n"
     "#    c c #\n"
@@ -330,7 +367,7 @@ TEST(TestState, MoveSimple) {
     b.DebugStringWithState(n3));
 
   // c kills it.
-  State n4(b, s, 4, State::RIGHT);
+  State n4(b, s, 0, State::RIGHT);
   EXPECT_EQ(
     "##########\n"
     "#    c c #\n"
@@ -347,7 +384,7 @@ TEST(TestState, MoveSimple2) {
   Board b(B005, *RULES);
   State s(B005);
   // 'd' turns 'a' into 'e', hence 'c' doesn't kill it.
-  State n1(b, s, 4, State::UP);
+  State n1(b, s, 0, State::UP);
   EXPECT_EQ(
     "##########\n"
     "#    d   #\n"

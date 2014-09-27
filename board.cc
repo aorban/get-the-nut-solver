@@ -5,7 +5,6 @@
 
 #include "board.h"
 #include "rules.h"
-//#include "network_sort.h"
 
 using namespace std;
 
@@ -210,7 +209,6 @@ void State::Initialize(const char *p) {
     }
   }
   Sort();
-  // network_sort(&t[num_tiles], num_tiles);
 }
 
 int State::Find(int pos) const {
@@ -331,13 +329,19 @@ void State::Erase(int tile_index) {
   --num_tiles;
 }
 
-void State::Hash(char* hash) const {
-  // long long h = 0;
-  // for (int i = 0; i < num_tiles; ++i) {
-  //   h <<= POSITION_BITS;
-  //   h += t[i];
-  // }
-  // return h;
+void State::Hash(HashValue hash) const {
+  for (int i = 0; i < HASH_SIZE; ++i) hash[i] = 0;
+  int idx_tile = 0;
+  int idx_hash = 0;
+  while (idx_tile < num_tiles) {
+    for (int i = 0; i < 6; ++i) {
+      int local_hash = (t[idx_tile].type << 4) + t[idx_tile].pos - BOARD_X;
+      hash[idx_hash] <<= 10;
+      hash[idx_hash] += local_hash;
+      if (++idx_tile >= num_tiles) break;
+    }
+    ++idx_hash;
+  }
 }
 
 std::string State::GetHistory() const {

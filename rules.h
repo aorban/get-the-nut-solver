@@ -5,6 +5,7 @@
 #include <vector>
 
 struct Action {
+  unsigned int dummy_ : 8;
   unsigned int moving_new_animal : 8;
   unsigned int static_new_animal : 8;
   unsigned int moving_animal_dies : 1;
@@ -13,7 +14,7 @@ struct Action {
   unsigned int lost : 1;
   unsigned int continues : 1;
   unsigned int prio : 2;
-  unsigned int exists : 1;
+  unsigned int exists : 1;  // Prio+exists has to be last for sort to work.
 };
 
 class Rules {

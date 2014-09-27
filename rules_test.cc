@@ -27,6 +27,27 @@ TEST(SplitTest, Comma) {
   EXPECT_EQ("", r[3]);
 }
 
+static inline int MY_intcmp(const void *aa, const void *bb) {
+  return ( *(int*)aa - *(int*)bb );
+}
+
+TEST(ActionTest, Sortint) {
+  static const int N = 200;
+  srand(117);
+  Action actions[N];
+  for (int i = 0; i < N; ++i) {
+    int *p = (int *)&actions[i];
+    *p = rand() + rand() + rand();
+    actions[i].exists = 1;
+  }
+  qsort((void *)actions, N, sizeof(int), MY_intcmp);
+  for (int i = 1; i < N; ++i) {
+    EXPECT_GE(actions[i].prio, actions[i-1].prio);
+  }
+  EXPECT_EQ(0, actions[0].prio);
+  EXPECT_EQ(3, actions[N-1].prio);
+}
+
 TEST(RulesTest, Static) {
   const int a = Rules::NUM_ANIMALS;
   EXPECT_GE(a, TriToCode("END") - 'a');
