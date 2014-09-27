@@ -7,6 +7,8 @@
 #include "rules.h"
 //#include "network_sort.h"
 
+using namespace std;
+
 #define DEBUG true
 
 class Voidify {
@@ -89,10 +91,10 @@ std::string Board::DebugString(const State *state) const {
 //     if (di == OPPOSITE(nodir)) continue;
 //     int d = State::DIRECTIONS[di];
 //     //printf("pos: %d, nodir: %d, dir: %d\n", pos, nodir, d);
-//     int newpos = pos + d;
-//     if (b[newpos] == BLANK && dist[tile][newpos][nodir] == INFINITY) {
-//       dist[tile][newpos][nodir] = value;
-//       FloodFrom(tile, newpos, nodir);
+//     int next_pos = pos + d;
+//     if (b[next_pos] == BLANK && dist[tile][next_pos][nodir] == INFINITY) {
+//       dist[tile][next_pos][nodir] = value;
+//       FloodFrom(tile, next_pos, nodir);
 //     }
 //   }
 // }
@@ -235,19 +237,22 @@ int State::Move(const Board &board, int moving_tile_index, int dir, State *n) co
   Tile* moving_tile = &(n->t[moving_tile_index]);
   int curr_pos = moving_tile->pos;
   bool can_move = true;
-  int num_steps = 0;
-  int final_res = 0;
-  // TODO(prio)??
   LOG(INFO) << board.DebugStringWithState(*n);
   Action actions[4];
+  int static_tile_indices[4];
   while (can_move) {
     // We just landed on curr_pos. We check all the possible rules.
+    LOG(1) << "Landed on tile " << curr_pos << endl;
     int num_actions = 0;
     for (int i = 0; i < 4; ++i) {
-      const int lookup_dir = DIRECTIONS[DIR_LOOKUP[dir][i]][0];
-      const int relation = DIRECTIONS[DIR_LOOKUP[dir][i]][1];
+      const int lookup_dir = DIRECTIONS[DIR_LOOKUP[dir][i][0]];
+      const int relation = DIR_LOOKUP[dir][i][1];
       int lookup_pos = curr_pos + lookup_dir;
       int static_tile_index = n->Find(lookup_pos);
+      if (static_tile_index == -1) continue; 
+      LOG(1) << "tile at " << lookup_pos <<  " dir: " << lookup_dir 
+             << " |" << char('a' + n->t[static_tile_index].type) << "|" 
+             << " rel: " << relation << std::endl;
       Action a = board.rules.GetAction(moving_tile->type, 
                                        n->t[static_tile_index].type,
                                        relation);
@@ -255,117 +260,68 @@ int State::Move(const Board &board, int moving_tile_index, int dir, State *n) co
         return LOSE;
       }
       if (a.exists) {
-        actions[num_actions++] = a;
+        LOG(1) << "Added new action" << endl;
+        actions[num_actions] = a;
+        static_tile_indices[num_actions] = static_tile_index;
+        ++num_actions;
       }
+    }
+    // TODO: We need to apply the moves in prio order.
+    for (int i = 0; i < num_actions; ++i) {
+      const Action& a = actions[i];
+      can_move = a.continues;
+      LOG(INFO) << board.DebugStringWithState(*n);
+      n->ApplyAction(moving_tile_index, static_tile_indices[i], a);
+      LOG(INFO) << board.DebugStringWithState(*n);
+      if (a.won) return WIN;
       if (a.moving_animal_dies || 
-          !a.continues ||
           a.moving_new_animal != moving_tile->type) {
-        // End of move if we die, change or stop.
+        // Stop applying the rest of the actions.
+        break;
+      }
+    }
+
+    LOG(1) << "check move: " << (can_move ? "Y" : "N") << endl;
+    if (can_move) {
+      // Make the next move
+      int next_pos = curr_pos + move;
+      if (board.b[next_pos] == BLANK) {
+        LOG(INFO) << "Moving to " << next_pos << std::endl;
+        moving_tile->pos = next_pos;
+        LOG(INFO) << board.DebugStringWithState(*n);
+        curr_pos = next_pos;
+      } else {
         can_move = false;
       }
     }
-
-    // boardon ha fal van, akkor nem kell rule lookup.
-
-    // AHEAD
-    int newpos = curr_pos + move;
-    int ahead_tile_index = -1;
-    if (board.b[newpos] != BLANK) {
-      // Wall ahead
-      can_move = false;
-      if (!num_steps) {
-        // Immediately blocked on wall, we don't need to check the rules.
-        return 0;
-      }
-    } else {
-      ahead_tile_index = n->Find(newpos);
-      if (ahead_tile_index != -1) {
-        LOG(1) << "tile ahead " << char('a' + n->t[ahead_tile_index].type) << std::endl;
-        // Another tile ahead. Check the rules.
-        Action a = board.rules.GetAction(moving_tile->type, 
-                                         n->t[ahead_tile_index].type,
-                                         Rules::AHEAD);
-        can_move = a.continues;
-        LOG(INFO) << "B" << board.DebugStringWithState(*n);
-        int res = n->ApplyAction(moving_tile_index, ahead_tile_index, a);
-        LOG(INFO) << "A" << board.DebugStringWithState(*n);
-        if (res == LOSE) {
-          return LOSE;
-        }
-        if (res == WIN) {
-          final_res = WIN;
-        }
-      }
-    }
-    // SIDE
-    for (int i = 0; i < 2; i++) {
-      int sidepos = curr_pos + DIRECTIONS[SIDE[dir][i]];
-      int static_tile_index = n->Find(sidepos);
-      if (static_tile_index != -1) {
-        LOG(1) << "tile at " << SIDE[dir][i] <<  " " << sidepos << 
-          " |" << char('a' + n->t[static_tile_index].type) << "|" << std::endl;
-        // Another tile at the side. Check the rules.
-        Action a = board.rules.GetAction(moving_tile->type,
-                                         n->t[static_tile_index].type,
-                                         Rules::SIDE);
-        can_move = a.continues;
-        LOG(INFO) << "B" << board.DebugStringWithState(*n);
-        int res = n->ApplyAction(moving_tile_index, static_tile_index, a); 
-        LOG(INFO) << "A" << board.DebugStringWithState(*n);
-        if (res == LOSE) {
-          return LOSE;
-        }
-        if (res == WIN) {
-          final_res = WIN;
-        }
-      }
-    }
-    // We will move to newpos.
-    // But before that we check the rules with "ON" relationship.
-    if (can_move && ahead_tile_index != -1) {
-      LOG(1) << "on check\n";
-      Action a = board.rules.GetAction(moving_tile->type,
-                                       n->t[ahead_tile_index].type,
-                                       Rules::ON);
-      can_move = a.continues;
-      LOG(INFO) << "B" << board.DebugStringWithState(*n);
-      int res = n->ApplyAction(moving_tile_index, ahead_tile_index, a);
-      LOG(INFO) << "A" << board.DebugStringWithState(*n);
-      if (res == LOSE) {
-        return LOSE;
-      }
-      if (res == WIN) {
-        final_res = WIN;
-      }
-    }
-
-    if (can_move) {
-      // Make the actual move
-      LOG(INFO) << "Moving to " << newpos << std::endl;
-      LOG(INFO) << board.DebugStringWithState(*n);
-      moving_tile->pos = newpos;
-      LOG(INFO) << board.DebugStringWithState(*n);
-      curr_pos = newpos;
-      ++num_steps;
-    }
   }
+  // boardon ha fal van, akkor nem kell rule lookup. Erdemes ez?
   n->Sort();
-  return final_res;
+  LOG(1) << "end of move\n";
+  return 0;
 }
 
-int State::ApplyAction(int moving_tile_index, int static_tile_index,
+void PrintAction(const Action& a) {
+  LOG(1) << "exists/won/lost/cont:" 
+         << a.exists << "/" 
+         << a.won << "/" 
+         << a.lost << "/" 
+         << a.continues 
+         << "\nmoving: new: " << char('a' + a.moving_new_animal) 
+         << " dies: " << (a.moving_animal_dies ? "Y" : "N")
+         << "\nstatic: new: " << char('a' + a.static_new_animal) 
+         << " dies: " << (a.static_animal_dies ? "Y" : "N") << endl;
+}
+
+void State::ApplyAction(int moving_tile_index, int static_tile_index,
                        const Action& a) {
-  LOG(1) << "ApplyAction: " << moving_tile_index << " " << static_tile_index
-         << " " << a.continues << "," << a.lost << "," << a.won << "--"
-         << a.moving_new_animal << ","
-         << a.static_new_animal << "," << a.moving_animal_dies << ","
-         << a.static_animal_dies << std::endl;
-  if (a.lost) return LOSE;
+  LOG(1) << "ApplyAction: " << moving_tile_index << " " << static_tile_index << endl;
+  PrintAction(a);
+  if (a.lost) return;
   t[moving_tile_index].type = a.moving_new_animal;
   t[static_tile_index].type = a.static_new_animal;
   if (a.moving_animal_dies) Erase(moving_tile_index);
   if (a.static_animal_dies) Erase(static_tile_index);
-  return a.won;
 }
 
 void State::Erase(int tile_index) {

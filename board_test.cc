@@ -8,25 +8,8 @@
 class MockRules : public Rules {
  public:
   MockRules() : Rules() {
-    {
-      // b does nothing with a, just stops it.
-      int a1 = 'a' - 'a';
-      int a2 = 'b' - 'a';
-      Action a;
-      a.moving_animal_dies = 0;
-      a.static_animal_dies = 0;
-      a.moving_new_animal = a1;
-      a.static_new_animal = a2;
-      a.won = 0;
-      a.lost = 0;
-      a.prio = 2;
-      a.exists = 1;
-      for (int r = 0; r < NUM_RELATIONS; ++r) {
-        a.continues = (r != Rules::AHEAD);
-        rules[a1][a2][r] = a;
-      }
-    }
-
+    // b does nothing with a, just stops it.
+    // This is default, so we don't need to add.
     {
       // c kills a if a moves near it.
       int a1 = 'a' - 'a';

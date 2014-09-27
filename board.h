@@ -75,7 +75,7 @@ class State {
   // Find the tile occupying a position. Return index or -1.
   int Find(int pos) const;
   
-  int ApplyAction(int moving_tile_index, int static_tile_index, const Action& a);
+  void ApplyAction(int moving_tile_index, int static_tile_index, const Action& a);
   void Erase(int tile_index);
 
   inline void Sort() {
