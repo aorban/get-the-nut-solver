@@ -147,12 +147,6 @@ const int State::RIGHT;
 const int State::DOWN;
 
 const int State::DIRECTIONS[] = {-BOARD_X, -1, +1, +BOARD_X};  // 3-dir must work!
-const int State::SIDE[][2] = {
-    {State::LEFT, State::RIGHT},  // up
-    {State::UP, State::DOWN},  // left
-    {State::UP, State::DOWN},  // right
-    {State::LEFT, State::RIGHT},  // down
-  };
 
 const int State::DIR_LOOKUP[][4][2] = {
   {  // up
@@ -249,6 +243,10 @@ int State::Move(
       const int lookup_dir = DIRECTIONS[DIR_LOOKUP[dir][i][0]];
       const int relation = DIR_LOOKUP[dir][i][1];
       int lookup_pos = curr_pos + lookup_dir;
+      // Don't lookup rule if there is a wall there
+      if (board.b[lookup_pos] != BLANK) {
+        continue;
+      }
       int static_tile_index = n->Find(lookup_pos);
       if (static_tile_index == -1) continue; 
       LOG(1) << "tile at " << lookup_pos <<  " dir: " << lookup_dir 
@@ -270,7 +268,7 @@ int State::Move(
     // TODO: We need to apply the moves in prio order.
     for (int i = 0; i < num_actions; ++i) {
       const Action& a = actions[i];
-      can_move = a.continues;
+      can_move = false;
       LOG(INFO) << board.DebugStringWithState(*n);
       n->ApplyAction(moving_tile_index, static_tile_indices[i], a);
       LOG(INFO) << board.DebugStringWithState(*n);
