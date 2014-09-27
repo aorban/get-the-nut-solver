@@ -47,6 +47,19 @@ class State {
   static const int LOSE = 1;
   static const int WIN = 2;
 
+  static const int HASH_SIZE = 4;
+  typedef long long *HashValue;
+  struct CmpByHash {
+    bool operator()(const HashValue& a, const HashValue& b) const {
+      for (int i = 0; i < HASH_SIZE; ++i) {
+        if (a[i] != b[i]) {
+          return a[i] < b[i];
+        }
+      }
+      return false;
+    }
+  };
+
   State();
 
   explicit State(const char *p);
@@ -58,7 +71,7 @@ class State {
   // Move based constructor.
   State(const Board &board, const State &old_state, int tile_index, int move);
 
-  void Hash(char* hash) const;
+  void Hash(HashValue) const;
 
   int NumTiles() const { return num_tiles; }
 

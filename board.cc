@@ -5,7 +5,6 @@
 
 #include "board.h"
 #include "rules.h"
-//#include "network_sort.h"
 
 #define DEBUG true
 
@@ -179,7 +178,6 @@ void State::Initialize(const char *p) {
     }
   }
   Sort();
-  // network_sort(&t[num_tiles], num_tiles);
 }
 
 int State::Find(int pos) const {
@@ -319,7 +317,7 @@ void State::Erase(int tile_index) {
   --num_tiles;
 }
 
-void State::Hash(char* hash) const {
+void State::Hash(HashValue hash) const {
   // long long h = 0;
   // for (int i = 0; i < num_tiles; ++i) {
   //   h <<= POSITION_BITS;

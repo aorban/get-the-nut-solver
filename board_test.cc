@@ -1,4 +1,5 @@
 #include <iostream>
+#include <map>
 
 #include "board.h"
 #include "rules.h"
@@ -192,6 +193,24 @@ class TestableState : public State {
   using State::Sort;
   using State::Erase;
 };
+
+TEST(TestState, StdHash) {
+  std::map<State::HashValue, int, State::CmpByHash> m;
+
+  int N = State::HASH_SIZE;
+  long long *h1 = new long long[N];
+  long long *h2 = new long long[N];
+  for(int i = 0; i < N; ++i) {
+    h1[i] = i;
+    h2[i] = i;
+  }
+  m[h1] = 10;
+  EXPECT_EQ(1, m.count(h2));
+  h2[N-1] = 99;
+  EXPECT_EQ(0, m.count(h2));
+  h2[N-1] = 3;
+  EXPECT_EQ(1, m.count(h2));
+}
 
 // TEST(TestState, TestStatic) {
 //   EXPECT_EQ(8, sizeof(long long));  // For hash.
