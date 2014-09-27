@@ -1,6 +1,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <stddef.h>
+#include <stdlib.h>
 
 #include "board.h"
 #include "rules.h"
@@ -177,6 +178,7 @@ void State::Initialize(const char *p) {
       ++num_tiles;
     }
   }
+  Sort();
   // network_sort(&t[num_tiles], num_tiles);
 }
 
@@ -291,7 +293,7 @@ int State::Move(const Board &board, int moving_tile_index, int dir, State *n) co
       ++num_steps;
     }
   }
-  // TODO: network sort.
+  n->Sort();
   return final_res;
 }
 

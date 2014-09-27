@@ -21,6 +21,10 @@ static inline int OPPOSITE(int dir) {
   return 3-dir;
 }
 
+static inline int MY_intcmp(const void *aa, const void *bb) {
+  return ( *(int*)aa - *(int*)bb );
+}
+
 struct Tile {
   unsigned int type : 8;
   unsigned int pos : 8;
@@ -72,6 +76,10 @@ class State {
   
   int ApplyAction(int moving_tile_index, int static_tile_index, const Action& a);
   void Erase(int tile_index);
+
+  inline void Sort() {
+    qsort((void *)t, num_tiles, sizeof(int), MY_intcmp);
+  }
 
  private:
   friend class Board;
