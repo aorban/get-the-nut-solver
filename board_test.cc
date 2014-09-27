@@ -190,6 +190,7 @@ class TestableState : public State {
   explicit TestableState(const char *i) : State(i) {}
   using State::Find;
   using State::Sort;
+  using State::Erase;
 };
 
 // TEST(TestState, TestStatic) {
@@ -241,8 +242,9 @@ class TestableState : public State {
 //   EXPECT_EQ(s007, s009);
 // }
 
-TEST(TestState, Positions) {
+TEST(TestState, Positions_Erase) {
   TestableState s004(B004);
+  EXPECT_EQ(9, s004.NumTiles());
   EXPECT_EQ(-1, s004.Find(POS(1, 5)));
   EXPECT_EQ(0, s004.Find(POS(1, 6)));
   EXPECT_EQ(3, s004.Find(POS(1, 7)));
@@ -250,6 +252,26 @@ TEST(TestState, Positions) {
   EXPECT_EQ(1, s004.Find(POS(2, 6)));
   EXPECT_EQ(4, s004.Find(POS(2, 7)));
   EXPECT_EQ(7, s004.Find(POS(2, 8)));
+
+  s004.Erase(4);
+  EXPECT_EQ(8, s004.NumTiles());
+  EXPECT_EQ(-1, s004.Find(POS(1, 5)));
+  EXPECT_EQ(0, s004.Find(POS(1, 6)));
+  EXPECT_EQ(3, s004.Find(POS(1, 7)));
+  EXPECT_EQ(5, s004.Find(POS(1, 8)));
+  EXPECT_EQ(1, s004.Find(POS(2, 6)));
+  EXPECT_EQ(-1, s004.Find(POS(2, 7)));
+  EXPECT_EQ(6, s004.Find(POS(2, 8)));
+
+  s004.Erase(1);
+  EXPECT_EQ(7, s004.NumTiles());
+  EXPECT_EQ(-1, s004.Find(POS(1, 5)));
+  EXPECT_EQ(0, s004.Find(POS(1, 6)));
+  EXPECT_EQ(2, s004.Find(POS(1, 7)));
+  EXPECT_EQ(4, s004.Find(POS(1, 8)));
+  EXPECT_EQ(-1, s004.Find(POS(2, 6)));
+  EXPECT_EQ(-1, s004.Find(POS(2, 7)));
+  EXPECT_EQ(5, s004.Find(POS(2, 8)));
 }
 
 // /*
