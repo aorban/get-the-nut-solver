@@ -42,6 +42,7 @@ class State {
   static const int DOWN = 3;
   static const int DIRECTIONS[];
   static const int SIDE[][2];
+  static const int DIR_LOOKUP[][4][2];
   
   static const int LOSE = 1;
   static const int WIN = 2;

@@ -147,6 +147,35 @@ const int State::SIDE[][2] = {
     {State::UP, State::DOWN},  // right
     {State::LEFT, State::RIGHT},  // down
   };
+
+const int State::DIR_LOOKUP[][4][2] = {
+  {  // up
+    {0, Rules::ON},  // on
+    {State::UP, Rules::AHEAD},  // ahead
+    {State::LEFT, Rules::SIDE}, // side
+    {State::RIGHT, Rules::SIDE}, // side
+  },
+  {  // left
+    {0, Rules::ON},  // on
+    {State::LEFT, Rules::AHEAD},  // ahead
+    {State::UP, Rules::SIDE}, // side
+    {State::DOWN, Rules::SIDE}, // side
+  },
+  {  // right
+    {0, Rules::ON},  // on
+    {State::RIGHT, Rules::AHEAD},  // ahead
+    {State::UP, Rules::SIDE}, // side
+    {State::DOWN, Rules::SIDE}, // side
+  },
+  {  // down
+    {0, Rules::ON},  // on
+    {State::DOWN, Rules::AHEAD},  // ahead
+    {State::LEFT, Rules::SIDE}, // side
+    {State::RIGHT, Rules::SIDE}, // side
+  },
+};
+
+
 State::State() {
   for (int i = 0; i < MAX_HISTORY; ++i) history[i] = 0;
   history[0] = 1;
@@ -204,15 +233,42 @@ int State::Move(const Board &board, int moving_tile_index, int dir, State *n) co
   // Copy state.
   *n = *o;
   Tile* moving_tile = &(n->t[moving_tile_index]);
-  int currpos = moving_tile->pos;
+  int curr_pos = moving_tile->pos;
   bool can_move = true;
   int num_steps = 0;
   int final_res = 0;
   // TODO(prio)??
   LOG(INFO) << board.DebugStringWithState(*n);
+  Action actions[4];
   while (can_move) {
+    // We just landed on curr_pos. We check all the possible rules.
+    int num_actions = 0;
+    for (int i = 0; i < 4; ++i) {
+      const int lookup_dir = DIRECTIONS[DIR_LOOKUP[dir][i]][0];
+      const int relation = DIRECTIONS[DIR_LOOKUP[dir][i]][1];
+      int lookup_pos = curr_pos + lookup_dir;
+      int static_tile_index = n->Find(lookup_pos);
+      Action a = board.rules.GetAction(moving_tile->type, 
+                                       n->t[static_tile_index].type,
+                                       relation);
+      if (a.lost) {
+        return LOSE;
+      }
+      if (a.exists) {
+        actions[num_actions++] = a;
+      }
+      if (a.moving_animal_dies || 
+          !a.continues ||
+          a.moving_new_animal != moving_tile->type) {
+        // End of move if we die, change or stop.
+        can_move = false;
+      }
+    }
+
+    // boardon ha fal van, akkor nem kell rule lookup.
+
     // AHEAD
-    int newpos = currpos + move;
+    int newpos = curr_pos + move;
     int ahead_tile_index = -1;
     if (board.b[newpos] != BLANK) {
       // Wall ahead
@@ -243,7 +299,7 @@ int State::Move(const Board &board, int moving_tile_index, int dir, State *n) co
     }
     // SIDE
     for (int i = 0; i < 2; i++) {
-      int sidepos = currpos + DIRECTIONS[SIDE[dir][i]];
+      int sidepos = curr_pos + DIRECTIONS[SIDE[dir][i]];
       int static_tile_index = n->Find(sidepos);
       if (static_tile_index != -1) {
         LOG(1) << "tile at " << SIDE[dir][i] <<  " " << sidepos << 
@@ -289,7 +345,7 @@ int State::Move(const Board &board, int moving_tile_index, int dir, State *n) co
       LOG(INFO) << board.DebugStringWithState(*n);
       moving_tile->pos = newpos;
       LOG(INFO) << board.DebugStringWithState(*n);
-      currpos = newpos;
+      curr_pos = newpos;
       ++num_steps;
     }
   }
