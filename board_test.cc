@@ -245,8 +245,11 @@ TEST(TestState, Positions) {
   TestableState s004(B004);
   EXPECT_EQ(-1, s004.Find(POS(1, 5)));
   EXPECT_EQ(0, s004.Find(POS(1, 6)));
-  EXPECT_EQ(1, s004.Find(POS(1, 7)));
-  EXPECT_EQ(2, s004.Find(POS(1, 8)));
+  EXPECT_EQ(3, s004.Find(POS(1, 7)));
+  EXPECT_EQ(6, s004.Find(POS(1, 8)));
+  EXPECT_EQ(1, s004.Find(POS(2, 6)));
+  EXPECT_EQ(4, s004.Find(POS(2, 7)));
+  EXPECT_EQ(7, s004.Find(POS(2, 8)));
 }
 
 // /*
@@ -279,7 +282,7 @@ TEST(TestState, MoveSimple) {
   Board b(B003, *RULES);
   State s(B003);
   // Stops at wall.
-  State n1(b, s, 4, State::DOWN);
+  State n1(b, s, 0, State::DOWN);
   EXPECT_EQ(
     "##########\n"
     "#    c c #\n"
@@ -292,7 +295,7 @@ TEST(TestState, MoveSimple) {
     b.DebugStringWithState(n1));
 
   // c kills it.
-  State n2(b, s, 4, State::UP);
+  State n2(b, s, 0, State::UP);
   EXPECT_EQ(
     "##########\n"
     "#    c c #\n"
@@ -305,7 +308,7 @@ TEST(TestState, MoveSimple) {
     b.DebugStringWithState(n2));
 
   // Stops at b.
-  State n3(b, s, 4, State::LEFT);
+  State n3(b, s, 0, State::LEFT);
   EXPECT_EQ(
     "##########\n"
     "#    c c #\n"
@@ -318,7 +321,7 @@ TEST(TestState, MoveSimple) {
     b.DebugStringWithState(n3));
 
   // c kills it.
-  State n4(b, s, 4, State::RIGHT);
+  State n4(b, s, 0, State::RIGHT);
   EXPECT_EQ(
     "##########\n"
     "#    c c #\n"
@@ -335,7 +338,7 @@ TEST(TestState, MoveSimple2) {
   Board b(B005, *RULES);
   State s(B005);
   // 'd' turns 'a' into 'e', hence 'c' doesn't kill it.
-  State n1(b, s, 4, State::UP);
+  State n1(b, s, 0, State::UP);
   EXPECT_EQ(
     "##########\n"
     "#    d   #\n"

@@ -27,8 +27,8 @@ static inline int MY_intcmp(const void *aa, const void *bb) {
 
 struct Tile {
   unsigned int dummy_: 16;
-  unsigned int type : 8;
   unsigned int pos : 8;
+  unsigned int type : 8;
 };
 
 class Action;
