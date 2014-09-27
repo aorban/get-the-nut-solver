@@ -24,7 +24,7 @@ class Rules {
   // TODO(aorban): format desc
   explicit Rules(const std::string& csv_file);
  
-  Action GetAction(int moving_animal, int static_animal, int relation) {
+  virtual Action GetAction(int moving_animal, int static_animal, int relation) const {
     return rules[moving_animal][static_animal][relation];
   }
 
