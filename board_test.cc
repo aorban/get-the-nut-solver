@@ -64,33 +64,6 @@ class MockRules : public Rules {
       }
     }
   }
-  /*
-  Action GetAction(int m, int s, int r) const {
-    char mo = char(m + 'a');
-    char st = char(s + 'a');
-    Action a;
-    // b does nothing with a, just stops it.
-    if (mo == 'a' && st == 'b') {
-      a.continues = (r != Rules::AHEAD);
-      a.moving_new_animal = m;
-      a.static_new_animal = s;
-    }
-    // c kills a if a moves near it.
-    if (mo == 'a' && st == 'c') {
-      a.continues = 0;
-      a.moving_animal_dies = 1;
-      a.static_new_animal = s;
-    }
-    // d turns 'a' into 'e'
-    if (mo == 'a' && st == 'd') {
-      a.continues = 0;
-      a.moving_animal_dies = 0;
-      a.moving_new_animal = ('e' - 'a');
-      a.static_new_animal = s;
-    }
-    return a;
-  }
-  */
 };
 
 static const Rules *RULES = new MockRules;
@@ -212,6 +185,13 @@ TEST(TestBoard, DebugString) {
 // State
 ////////////////////////////////////////////////////////////////////////////////
 
+class TestableState : public State {
+ public:
+  explicit TestableState(const char *i) : State(i) {}
+  using State::Find;
+  using State::Sort;
+};
+
 // TEST(TestState, TestStatic) {
 //   EXPECT_EQ(8, sizeof(long long));  // For hash.
 //   EXPECT_LE(10, MAX_TILES);  // If this breaks, Hash() needs to be reconsidered.
@@ -261,22 +241,13 @@ TEST(TestBoard, DebugString) {
 //   EXPECT_EQ(s007, s009);
 // }
 
-// TEST(TestState, Positions) {
-//   {
-//     TestableState s004(B004);
-//     EXPECT_EQ(s004.Find(POS(1, 5)), 0);
-//     EXPECT_EQ(s004.Find(POS(1, 6)), 1);
-//     EXPECT_EQ(s004.Find(POS(1, 7)), 2);
-//     EXPECT_EQ(s004.Find(POS(1, 4)), -1);
-//   }
-//   {
-//     TestableState s007(B007);
-//     EXPECT_EQ(s007.Find(POS(1, 5)), 2);
-//     EXPECT_EQ(s007.Find(POS(1, 6)), 0);
-//     EXPECT_EQ(s007.Find(POS(1, 7)), 1);
-//     EXPECT_EQ(s007.Find(POS(1, 4)), -1);
-//   }
-// }
+TEST(TestState, Positions) {
+  TestableState s004(B004);
+  EXPECT_EQ(-1, s004.Find(POS(1, 5)));
+  EXPECT_EQ(0, s004.Find(POS(1, 6)));
+  EXPECT_EQ(1, s004.Find(POS(1, 7)));
+  EXPECT_EQ(2, s004.Find(POS(1, 8)));
+}
 
 // /*
 // TEST(TestState, MoveReturnValue) {
