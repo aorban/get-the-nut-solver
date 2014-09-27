@@ -7,11 +7,10 @@ static const int BOARD_X = 10;
 static const int BOARD_Y = 8;
 
 static const int BOARD_SIZE = BOARD_X * BOARD_Y;
-static const int TILE_BITS = 16;  // 2^TILE_BITS > BOARD_SIZE
 
 static const int MAX_TILES = 12;
 
-static const int MAX_HISTORY = 2;  // times 32 moves.
+static const int MAX_HISTORY = 40;
 
 static inline int POS(int Y, int X) {
   return Y * BOARD_X + X;
@@ -48,6 +47,11 @@ class State {
   static const int LOSE = 1;
   static const int WIN = 2;
 
+  struct HistoryItem {
+    unsigned char tile_index : 6;
+    unsigned char dir : 2;
+  };
+
   static const int HASH_SIZE = 2;
   typedef unsigned long long *HashValue;
   struct CmpByHash {
@@ -78,7 +82,7 @@ class State {
 
   unsigned int GetSquirrelPos() const { return t[0].pos; }
 
-  std::string GetHistory() const;
+  const HistoryItem *GetHistory() const;
   int GetHistoryLen() const;
 
  protected:
@@ -89,7 +93,8 @@ class State {
   // Find the tile occupying a position. Return index or -1.
   int Find(int pos) const;
   
-  void ApplyAction(int moving_tile_index, int static_tile_index, const Action& a);
+  void ApplyAction(
+      int moving_tile_index, int static_tile_index, const Action& a);
   void Erase(int tile_index);
 
   inline void Sort() {
@@ -99,8 +104,9 @@ class State {
  private:
   friend class Board;
   int num_tiles;
-  unsigned long long history[MAX_HISTORY];
   Tile t[MAX_TILES];      // Tiles.
+  unsigned char history_len;
+  HistoryItem history[MAX_HISTORY];
 };
 
 typedef int Cell;

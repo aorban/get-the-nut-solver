@@ -569,20 +569,29 @@ TEST(TestState, MoveSimple2) {
 //       "#########").Hash());
 // }
 
-// TEST(TestState, GetHistory) {
-//   Board b(B003);
-//   State s(B003);
-//   EXPECT_EQ("", s.GetHistory());
-//   EXPECT_EQ(0, s.GetHistoryLen());
+TEST(TestState, GetHistory) {
+  Board b(B003, *RULES);
+  State s(B003);
+  EXPECT_EQ(0, s.GetHistoryLen());
 
-//   State s1(b, s, State::DOWN);
-//   EXPECT_EQ("D", s1.GetHistory());
-//   EXPECT_EQ(1, s1.GetHistoryLen());
+  State n1(b, s, 0, State::DOWN);
+  EXPECT_EQ(1, n1.GetHistoryLen());
+  {
+    const State::HistoryItem *h = n1.GetHistory();
+    EXPECT_EQ(0, h[0].tile_index);
+    EXPECT_EQ(State::DOWN, h[0].dir);
+  }
 
-//   State s2(b, s1, State::RIGHT);
-//   EXPECT_EQ("DR", s2.GetHistory());
-//   EXPECT_EQ(2, s2.GetHistoryLen());
-// }
+  State n2(b, n1, 2, State::RIGHT);
+  EXPECT_EQ(2, n2.GetHistoryLen());
+  {
+    const State::HistoryItem *h = n2.GetHistory();
+    EXPECT_EQ(0, h[0].tile_index);
+    EXPECT_EQ(State::DOWN, h[0].dir);
+    EXPECT_EQ(2, h[1].tile_index);
+    EXPECT_EQ(State::RIGHT, h[1].dir);
+  }
+}
 
 // TEST(TestState, GetHistory_30) {
 //   Board b(B003);

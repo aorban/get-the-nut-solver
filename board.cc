@@ -141,6 +141,11 @@ int Board::MinMovesFrom(const State &state) const {
 // State
 ////////////////////////////////////////////////////////////////////////////////
 
+const int State::UP;
+const int State::LEFT;
+const int State::RIGHT;
+const int State::DOWN;
+
 const int State::DIRECTIONS[] = {-BOARD_X, -1, +1, +BOARD_X};  // 3-dir must work!
 const int State::SIDE[][2] = {
     {State::LEFT, State::RIGHT},  // up
@@ -178,8 +183,7 @@ const int State::DIR_LOOKUP[][4][2] = {
 
 
 State::State() {
-  for (int i = 0; i < MAX_HISTORY; ++i) history[i] = 0;
-  history[0] = 1;
+  history_len = 0;
 }
 
 State::State(const Board &board, const State &old_state, int tile_index, int move) {
@@ -191,8 +195,7 @@ State::State(const char *p) {
 }
 
 void State::Initialize(const char *p) {
-  for (int i = 0; i < MAX_HISTORY; ++i) history[i] = 0;
-  history[0] = 1;
+  history_len = 0;
   num_tiles = 0;
   for (int i = 0; i < MAX_TILES; ++i) { t[i].pos = 0; t[i].type = 0; }
   for (int i = 0; i < BOARD_Y * BOARD_X; ++i) {
@@ -220,18 +223,18 @@ int State::Find(int pos) const {
   return -1;
 }
 
-int State::Move(const Board &board, int moving_tile_index, int dir, State *n) const {
-  // TODO: history
-  // for (int i = MAX_HISTORY - 1; i > 0; --i) {
-  //   unsigned long long carry = (history[i-1] & (3llu << 62)) >> 62;
-  //   n->history[i] = (history[i] << 2) | carry;
-  // }
-  // n->history[0] = history[0] << 2 | dir;
-
+int State::Move(
+    const Board &board, int moving_tile_index, int dir, State *n) const {
   const int move = DIRECTIONS[dir];
   const State *o = this;  // "old"
   // Copy state.
   *n = *o;
+  {
+    HistoryItem hist;
+    hist.tile_index = moving_tile_index;
+    hist.dir = dir;
+    n->history[n->history_len++] = hist;
+  }
   Tile* moving_tile = &(n->t[moving_tile_index]);
   int curr_pos = moving_tile->pos;
   bool can_move = true;
@@ -344,48 +347,10 @@ void State::Hash(HashValue hash) const {
   }
 }
 
-std::string State::GetHistory() const {
-  return "";
-  // static const char DIRNAME[] = "ULRD";
-  // std::string ret;
-
-  // int idx = MAX_HISTORY - 1;
-  // while(history[idx] == 0) --idx;
-
-  // // First element.
-  // int shift = 62;
-  // unsigned long long mask = 3ull << shift;
-  // while (!((history[idx] & mask) >> shift)) {
-  //   shift -= 2;
-  //   mask >>= 2;
-  //   //printf ("%llx - %d\n", mask, shift);
-  // }
-  // while(shift > 0) {
-  //   shift -= 2;
-  //   mask >>= 2;
-  //   ret += DIRNAME[(history[idx] & mask) >> shift];
-  // }
-  // // Other elements.
-  // while(--idx >= 0) {
-  //   int shift = 62;
-  //   unsigned long long mask = 3ull << shift;
-  //   while(shift >= 0) {
-  //     ret += DIRNAME[(history[idx] & mask) >> shift];
-  //     shift -= 2;
-  //     mask >>= 2;
-  //   }
-  // }
-  // return ret;
+const State::HistoryItem *State::GetHistory() const {
+  return history;
 }
 
 int State::GetHistoryLen() const {
-    int idx = MAX_HISTORY - 1;
-    while(history[idx] == 0) --idx;
-
-    int ret = sizeof(unsigned long long) * 4 * idx;
-
-    unsigned long long h = history[idx];
-
-    while (h >>= 2)	ret += 1;
-    return ret;
+  return history_len;
 }
