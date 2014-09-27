@@ -34,7 +34,7 @@ class Rules {
     return rules[moving_animal][static_animal][relation];
   }
 
- private:  
+ protected:
   // dim: allat1 x allat2 x relation
   Action rules[NUM_ANIMALS][NUM_ANIMALS][NUM_RELATIONS];
 

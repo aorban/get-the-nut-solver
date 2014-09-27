@@ -43,12 +43,12 @@ rules_test: rules_test.o rules.o $(GTEST)
 # board
 ################################################################################
 
-board.o: board.cc board.h rules.o
+board.o: board.cc board.h rules.o rules.h
 	$(CXX) $(CCFLAGS) -c $< -o $@ 
 
 board_test.o: board_test.cc board.h
 	$(CXX) $(CCFLAGS) -c $< -o $@
 
 board_test: board_test.o board.o rules.o $(GTEST)
-#	$(LINK) -o $@ $^ $(LDFLAGS)
+	$(LINK) -o $@ $^ $(LDFLAGS)
 

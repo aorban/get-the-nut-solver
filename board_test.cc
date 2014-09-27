@@ -5,9 +5,50 @@
 
 #include "gtest/gtest.h"
 
-class MyRules : public Rules {
+class MockRules : public Rules {
  public:
-  MyRules(const std::string& s) : Rules(s) {}
+  MockRules() : Rules() {
+    // b does nothing with a, just stops it.
+    // This is done by default.
+
+    {
+      // c kills a if a moves near it.
+      int a1 = 'a' - 'a';
+      int a2 = 'c' - 'a';
+      Action a;
+      a.moving_animal_dies = 1;
+      a.static_animal_dies = 0;
+      a.moving_new_animal = a1;
+      a.static_new_animal = a2;
+      a.won = 0;
+      a.lost = 0;
+      a.continues = 0;
+      a.prio = 2;
+      a.exists = 1;
+      for (int r = 0; r < NUM_RELATIONS; ++r) {
+        rules[a1][a2][r] = a;
+      }
+    }
+    {
+      // d turns 'a' into 'e'
+      int a1 = 'a' - 'a';
+      int a2 = 'd' - 'a';
+      Action a;
+      a.moving_animal_dies = 1;
+      a.static_animal_dies = 0;
+      a.moving_new_animal = 'e' - 'a';
+      a.static_new_animal = a2;
+      a.won = 0;
+      a.lost = 0;
+      a.continues = 0;
+      a.prio = 2;
+      a.exists = 1;
+      for (int r = 0; r < NUM_RELATIONS; ++r) {
+        rules[a1][a2][r] = a;
+      }
+    }
+  }
+  /*
   Action GetAction(int m, int s, int r) const {
     char mo = char(m + 'a');
     char st = char(s + 'a');
@@ -32,10 +73,11 @@ class MyRules : public Rules {
       a.static_new_animal = s;
     }
     return a;
-  } 
+  }
+  */
 };
 
-static const MyRules RULES("");
+static const Rules *RULES = new MockRules;
 
 static const char B001[] =
     "##########"
@@ -93,14 +135,14 @@ static const char B005[] =
 ////////////////////////////////////////////////////////////////////////////////
 
 TEST(TestBoard, Construct) {
-  Board b001(B001, RULES);
-  Board b002(B002, RULES);
-  Board b003(B003, RULES);
-  Board b004(B004, RULES);
+  Board b001(B001, *RULES);
+  Board b002(B002, *RULES);
+  Board b003(B003, *RULES);
+  Board b004(B004, *RULES);
 }
 
 TEST(TestBoard, DebugString) {
-  Board b(B004, RULES);
+  Board b(B004, *RULES);
   State s(B004);
   EXPECT_EQ(
     "##########\n"
@@ -247,7 +289,7 @@ TEST(TestBoard, DebugString) {
 //     "##########";
 
 TEST(TestState, MoveSimple) {
-  Board b(B003, RULES);
+  Board b(B003, *RULES);
   State s(B003);
   // Stops at wall.
   State n1(b, s, 4, State::DOWN);
@@ -303,7 +345,7 @@ TEST(TestState, MoveSimple) {
 }
 
 TEST(TestState, MoveSimple2) {
-  Board b(B005, RULES);
+  Board b(B005, *RULES);
   State s(B005);
   // 'd' turns 'a' into 'e', hence 'c' doesn't kill it.
   State n1(b, s, 4, State::UP);
