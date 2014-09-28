@@ -236,16 +236,6 @@ int State::Find(int pos) const {
   return -1;
 }
 
-int State::FindWithSkip(int pos, int skip_index) const {
-  for (int i = 0; i < num_tiles; ++i) {
-    if (i == skip_index) continue;
-    if (t[i].pos == pos) {
-      return i;
-    }
-  }
-  return -1;
-}
-
 struct ActionInfo {
   Action action;
   int static_tile_index;
@@ -270,10 +260,12 @@ int State::Move(
   Tile* moving_tile = &(n->t[moving_tile_index]);
   int curr_pos = moving_tile->pos;
   int orig_moving_type = moving_tile->type;
-  bool can_move = true;
+  bool end_of_move = false;
   LOG(INFO) << board.DebugStringWithState(*n);
   ActionInfo action_infos[4];
-  while (can_move) {
+  // The (other) tile we are stepping on.
+  int tile_on_index = -1;
+  while (!end_of_move) {
     // We just landed on curr_pos. We check all the possible rules.
     LOG(1) << "Landed on tile " << curr_pos << endl;
     int num_actions = 0;
@@ -287,13 +279,17 @@ int State::Move(
       }
       LOG(1) << "checking tile at " << lookup_pos <<  " dir: " << lookup_dir 
              << " rel: " << relation << std::endl;
-      int static_tile_index;
-      if (lookup_pos == curr_pos) {
-        // If we are looking at the same pos where the moving tile is, exclude
-        // the moving tile.
-        static_tile_index = n->FindWithSkip(lookup_pos, moving_tile_index);
+      int static_tile_index = -1;
+      if (relation == Rules::ON) {
+        // Reuse what we have computed before. It is guaranteed to happen before
+        // the Rules::AHEAD case by the order in DIR_LOOKUP, otherwise we would
+        // overwrite tile_on_index.
+        static_tile_index = tile_on_index;
       } else {
         static_tile_index = n->Find(lookup_pos);
+      }
+      if (relation == Rules::AHEAD) {
+        tile_on_index = static_tile_index; 
       }
       if (static_tile_index == -1) continue; 
       LOG(1) << "tile at " << lookup_pos <<  " dir: " << lookup_dir 
@@ -323,7 +319,7 @@ int State::Move(
     }
     for (int i = 0; i < num_actions; ++i) {
       const Action& a = action_infos[i].action;
-      can_move = false;
+      end_of_move = true;
       LOG(1) << board.DebugStringWithState(*n);
       n->ApplyAction(moving_tile_index,
                      action_infos[i].static_tile_index,
@@ -336,13 +332,13 @@ int State::Move(
         break;
       }
     }
-    // TODO: don't call this always.
-    n->EraseAll();
-    LOG(1) << board.DebugStringWithState(*n);
-
-    LOG(1) << "check move: " << (can_move ? "Y" : "N") << endl;
-    if (can_move) {
-      // Make the next move
+    if (num_actions > 0) {
+      n->EraseAll();
+      LOG(1) << board.DebugStringWithState(*n);
+    }
+    LOG(1) << "end of move: " << (end_of_move ? "Y" : "N") << endl;
+    if (!end_of_move) {
+      // Check that we can make the next move
       int next_pos = curr_pos + move;
       if (board.b[next_pos] == BLANK) {
         LOG(INFO) << "Moving to " << next_pos << std::endl;
@@ -350,11 +346,10 @@ int State::Move(
         LOG(INFO) << board.DebugStringWithState(*n);
         curr_pos = next_pos;
       } else {
-        can_move = false;
+        end_of_move = true;
       }
     }
   }
-  // boardon ha fal van, akkor nem kell rule lookup. Erdemes ez?
   n->Sort();
   LOG(1) << "end of move\n";
   return 0;
