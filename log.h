@@ -1,4 +1,4 @@
-#define DEBUG false
+#define DEBUG 0
 
 class Voidify {
  public:
@@ -7,5 +7,5 @@ class Voidify {
   // higher than ?:
   void operator&(std::ostream&) {}
 };
-#define LOG(x) !DEBUG ? (void)0 : Voidify() & std::cout
+#define LOG(x) (x > DEBUG) ? (void)0 : Voidify() & std::cout
 

@@ -24,6 +24,7 @@ static inline int MY_intcmp(const void *aa, const void *bb) {
   return ( *(int*)aa - *(int*)bb );
 }
 
+
 struct Tile {
   unsigned int dummy_: 15;
   unsigned int to_erase : 1;
@@ -42,7 +43,7 @@ class State {
   static const int RIGHT = 2;
   static const int DOWN = 3;
   static const int DIRECTIONS[];
-  static const int SIDE[][2];
+  static const char DIRNAME[];
   static const int DIR_LOOKUP[][4][2];
   
   static const int LOSE = 1;
@@ -80,6 +81,7 @@ class State {
   void Hash(HashValue) const;
 
   int NumTiles() const { return num_tiles; }
+  const Tile& GetTile(int index) const { return t[index]; }
 
   unsigned int GetSquirrelPos() const { return t[0].pos; }
 

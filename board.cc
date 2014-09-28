@@ -1,28 +1,17 @@
 #include <cstdlib>
 #include <iostream>
+#include <sstream>
 #include <stddef.h>
 #include <stdlib.h>
 
 #include "board.h"
+#include "convert.h"
 #include "log.h"
 #include "rules.h"
 
 using namespace std;
 
 static const int INFINITY = 1000;
-
-void PrintAction(const Action& a) {
-  LOG(1) << "exists/won/lost/cont/prio:" 
-         << a.exists << "/" 
-         << a.won << "/" 
-         << a.lost << "/" 
-         << a.continues << "/"
-         << a.prio
-         << "\nmoving: new: " << char('a' + a.moving_new_animal) 
-         << " dies: " << (a.moving_animal_dies ? "Y" : "N")
-         << "\nstatic: new: " << char('a' + a.static_new_animal) 
-         << " dies: " << (a.static_animal_dies ? "Y" : "N") << endl;
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Board
@@ -138,6 +127,7 @@ std::string Board::DebugString(const State *state) const {
 // }
 
 int Board::MinMovesFrom(const State &state) const {
+  return 0;
   int squirrel_pos = state.GetSquirrelPos();
   int num_blocking = 0;
   for (int i = 0; i < state.NumTiles(); ++i) {
@@ -155,6 +145,7 @@ const int State::LEFT;
 const int State::RIGHT;
 const int State::DOWN;
 
+const char State::DIRNAME[] = "ULRD";
 const int State::DIRECTIONS[] = {-BOARD_X, -1, +1, +BOARD_X};  // 3-dir must work!
 
 const int State::DIR_LOOKUP[][4][2] = {
@@ -237,6 +228,8 @@ inline int prio_cmp(const void* a, const void* b) {
 
 int State::Move(
     const Board &board, int moving_tile_index, int dir, State *n) const {
+  LOG(1) << "\n\nMove start: " << char(t[moving_tile_index].type + 'a')
+         << " " << DIRNAME[dir] << endl;
   const int move = DIRECTIONS[dir];
   const State *o = this;  // "old"
   // Copy state.
@@ -251,13 +244,13 @@ int State::Move(
   int curr_pos = moving_tile->pos;
   int orig_moving_type = moving_tile->type;
   bool end_of_move = false;
-  LOG(INFO) << board.DebugStringWithState(*n);
+  LOG(1) << board.DebugStringWithState(*n);
   ActionInfo action_infos[4];
   // The (other) tile we are stepping on.
   int tile_on_index = -1;
   while (!end_of_move) {
     // We just landed on curr_pos. We check all the possible rules.
-    LOG(1) << "Landed on tile " << curr_pos << endl;
+    LOG(2) << "Landed on tile " << curr_pos << endl;
     int num_actions = 0;
     for (int i = 0; i < 4; ++i) {
       const int lookup_dir = DIR_LOOKUP[dir][i][0];
@@ -267,7 +260,7 @@ int State::Move(
       if (board.b[lookup_pos] != BLANK) {
         continue;
       }
-      LOG(1) << "checking tile at " << lookup_pos <<  " dir: " << lookup_dir 
+      LOG(2) << "checking tile at " << lookup_pos <<  " dir: " << lookup_dir 
              << " rel: " << relation << std::endl;
       int static_tile_index = -1;
       if (relation == Rules::ON) {
@@ -282,7 +275,7 @@ int State::Move(
         tile_on_index = static_tile_index; 
       }
       if (static_tile_index == -1) continue; 
-      LOG(1) << "tile at " << lookup_pos <<  " dir: " << lookup_dir 
+      LOG(2) << "tile at " << lookup_pos <<  " dir: " << lookup_dir 
              << " |" << char('a' + n->t[static_tile_index].type) << "|" 
              << " rel: " << relation << std::endl;
       Action a = board.rules.GetAction(moving_tile->type, 
@@ -292,29 +285,29 @@ int State::Move(
         return LOSE;
       }
       if (a.exists) {
-        LOG(1) << "Added new action" << endl;
+        LOG(2) << "Added new action" << endl;
         action_infos[num_actions].action = a;
         action_infos[num_actions].static_tile_index = static_tile_index;
         ++num_actions;
       }
     }
-    LOG(1) << "Before sort\n";
+    LOG(2) << "Before sort\n";
     for (int i = 0; i < num_actions; ++i) {
-      PrintAction(action_infos[i].action);
+      LOG(2) << PrintAction(action_infos[i].action);
     }
     qsort(action_infos, num_actions, sizeof(ActionInfo), prio_cmp);
-    LOG(1) << "After sort\n";
+    LOG(2) << "After sort\n";
     for (int i = 0; i < num_actions; ++i) {
-      PrintAction(action_infos[i].action);
+      LOG(2) << PrintAction(action_infos[i].action);
     }
     for (int i = 0; i < num_actions; ++i) {
       const Action& a = action_infos[i].action;
       end_of_move = true;
-      LOG(1) << board.DebugStringWithState(*n);
+      LOG(2) << board.DebugStringWithState(*n);
       n->ApplyAction(moving_tile_index,
                      action_infos[i].static_tile_index,
                      a);
-      LOG(1) << board.DebugStringWithState(*n);
+      LOG(2) << board.DebugStringWithState(*n);
       if (a.won) return WIN;
       if (a.moving_animal_dies || 
           a.moving_new_animal != orig_moving_type) {
@@ -324,16 +317,16 @@ int State::Move(
     }
     if (num_actions > 0) {
       n->EraseAll();
-      LOG(1) << board.DebugStringWithState(*n);
+      LOG(2) << board.DebugStringWithState(*n);
     }
-    LOG(1) << "end of move: " << (end_of_move ? "Y" : "N") << endl;
+    LOG(2) << "end of move: " << (end_of_move ? "Y" : "N") << endl;
     if (!end_of_move) {
       // Check that we can make the next move
       int next_pos = curr_pos + move;
       if (board.b[next_pos] == BLANK) {
-        LOG(INFO) << "Moving to " << next_pos << std::endl;
+        LOG(2) << "Moving to " << next_pos << std::endl;
         moving_tile->pos = next_pos;
-        LOG(INFO) << board.DebugStringWithState(*n);
+        LOG(2) << board.DebugStringWithState(*n);
         curr_pos = next_pos;
       } else {
         end_of_move = true;
@@ -341,14 +334,15 @@ int State::Move(
     }
   }
   n->Sort();
-  LOG(1) << "end of move\n";
+  LOG(1) << board.DebugStringWithState(*n);
+  LOG(2) << "end of move\n";
   return 0;
 }
 
 void State::ApplyAction(int moving_tile_index, int static_tile_index,
                        const Action& a) {
   LOG(1) << "ApplyAction: " << moving_tile_index << " " << static_tile_index << endl;
-  PrintAction(a);
+  LOG(1) << PrintAction(a);
   if (a.lost) return;
   t[moving_tile_index].type = a.moving_new_animal;
   t[static_tile_index].type = a.static_new_animal;
