@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <iostream>
+#include <sstream>
 #include <fstream>
 #include <string>
 
@@ -8,6 +9,23 @@
 #include "rules.h"
 
 using namespace std;
+
+string PrintAction(const Action& a) {
+  stringstream ss;
+  ss << "exists/won/lost/cont/prio:" 
+     << a.exists << "/" 
+     << a.won << "/" 
+     << a.lost << "/" 
+     << a.continues << "/"
+     << a.prio
+     << "\nmoving: new: " << char('a' + a.moving_new_animal) 
+     << "(" << CodeToTri(char('a' + a.moving_new_animal)) << ")"
+     << " dies: " << (a.moving_animal_dies ? "Y" : "N")
+     << "\nstatic: new: " << char('a' + a.static_new_animal) 
+     << "(" << CodeToTri(char('a' + a.static_new_animal)) << ")"
+     << " dies: " << (a.static_animal_dies ? "Y" : "N") << endl;
+  return ss.str();
+}
 
 void SplitString(const string& s, const string& delim, vector<string> *result) {
     const bool keep_empty = true;
@@ -84,6 +102,7 @@ Rules::Rules(const std::string& csv_file) {
     if (values[1] == "Moving animal") continue;
 
     Action action;
+    *((int*)&action) = 0;
     action.exists = 1;
     action.prio = atoi(values[6].c_str());
     action.moving_animal_dies = 0;

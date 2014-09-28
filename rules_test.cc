@@ -105,6 +105,14 @@ class RealRulesTest : public ::testing::Test {
 };
 Rules *RealRulesTest::r;
 
+TEST_F(RealRulesTest, Squirrel) {
+  {
+    Action a = r->GetAction(TILE("SQR"), TILE("ACG"), Rules::AHEAD);
+    EXPECT_FALSE(a.lost);
+    EXPECT_TRUE(a.won);
+  }
+}
+
 TEST_F(RealRulesTest, Hog) {
   {
     // Hogs pass each other.

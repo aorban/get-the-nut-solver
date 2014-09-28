@@ -17,6 +17,8 @@ struct Action {
   unsigned int exists : 1;  // Prio+exists has to be last for sort to work.
 };
 
+std::string PrintAction(const Action& a);
+
 class Rules {
  public:
   static const int NUM_ANIMALS = 20;
