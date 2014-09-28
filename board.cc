@@ -252,7 +252,7 @@ struct ActionInfo {
 };
 
 inline int prio_cmp(const void* a, const void* b) {
-  return ((ActionInfo*)a)->action.prio > ((ActionInfo*)b)->action.prio;
+  return ((ActionInfo*)a)->action.prio - ((ActionInfo*)b)->action.prio;
 }
 
 int State::Move(
