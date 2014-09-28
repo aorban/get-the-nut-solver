@@ -287,7 +287,14 @@ int State::Move(
       }
       LOG(1) << "checking tile at " << lookup_pos <<  " dir: " << lookup_dir 
              << " rel: " << relation << std::endl;
-      int static_tile_index = n->FindWithSkip(lookup_pos, moving_tile_index);
+      int static_tile_index;
+      if (lookup_pos == curr_pos) {
+        // If we are looking at the same pos where the moving tile is, exclude
+        // the moving tile.
+        static_tile_index = n->FindWithSkip(lookup_pos, moving_tile_index);
+      } else {
+        static_tile_index = n->Find(lookup_pos);
+      }
       if (static_tile_index == -1) continue; 
       LOG(1) << "tile at " << lookup_pos <<  " dir: " << lookup_dir 
              << " |" << char('a' + n->t[static_tile_index].type) << "|" 
