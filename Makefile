@@ -43,7 +43,7 @@ rules_test: rules_test.o rules.o $(GTEST)
 # board
 ################################################################################
 
-board.o: board.cc board.h rules.o rules.h
+board.o: board.cc board.h rules.o rules.h log.h
 	$(CXX) $(CCFLAGS) -c $< -o $@ 
 
 board_test.o: board_test.cc board.h

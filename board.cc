@@ -4,20 +4,10 @@
 #include <stdlib.h>
 
 #include "board.h"
+#include "log.h"
 #include "rules.h"
 
 using namespace std;
-
-#define DEBUG true
-
-class Voidify {
- public:
-  Voidify() { }
-  // This has to be an operator with a precedence lower than << but
-  // higher than ?:
-  void operator&(std::ostream&) {}
-};
-#define LOG(x) !DEBUG ? (void)0 : Voidify() & std::cout
 
 static const int INFINITY = 1000;
 
