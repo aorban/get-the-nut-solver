@@ -1,5 +1,5 @@
-#ifndef _CRYPTICA_SOLVE_H__
-#define _CRYPTICA_SOLVE_H__
+#ifndef _GTN_SOLVE_H__
+#define _GTN_SOLVE_H__
 
 #include <map>
 #include <set>
@@ -74,5 +74,5 @@ struct SolveResult {
 // Returns whether the puzzle can be solved.
 SolveResult solve(const Board& board, const State& start_state);
 
-#endif // _CRYPTICA_SOLVE_H__
+#endif // _GTN_SOLVE_H__
 

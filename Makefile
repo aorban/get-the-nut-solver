@@ -35,11 +35,14 @@ convert_test.o: convert_test.cc convert.h
 convert_test: convert_test.o $(GTEST)
 	$(LINK) -o $@ $^ $(LDFLAGS)
 
-rules.o: rules.cc rules.h convert.h
+utils.o: utils.cc utils.h convert.h
+	$(CXX) $(CCFLAGS) -c $< -o $@
+
+rules.o: rules.cc rules.h convert.h utils.o
 	$(CXX) $(CCFLAGS) -c $< -o $@
 rules_test.o: rules_test.cc rules.h
 	$(CXX) $(CCFLAGS) -c $< -o $@
-rules_test: rules_test.o rules.o $(GTEST)
+rules_test: rules_test.o rules.o utils.o $(GTEST)
 	$(LINK) -o $@ $^ $(LDFLAGS)
 
 ################################################################################
@@ -52,7 +55,7 @@ board.o: board.cc board.h rules.o rules.h log.h convert.h
 board_test.o: board_test.cc board.h
 	$(CXX) $(CCFLAGS) -c $< -o $@
 
-board_test: board_test.o board.o rules.o $(GTEST)
+board_test: board_test.o board.o rules.o utils.o $(GTEST)
 	$(LINK) -o $@ $^ $(LDFLAGS)
 
 
@@ -73,8 +76,8 @@ solve.o: solve.cc solve.h board.h log.h
 solve_test.o: solve_test.cc solve.h testboards.h
 	$(CXX) $(CCFLAGS) -c $< -o $@
 
-solve_test: solve.o solve_test.o board.o rules.o $(GTEST)
+solve_test: solve.o solve_test.o board.o rules.o utils.o $(GTEST)
 	$(LINK) -o $@ $^ $(LDFLAGS)
 
-solve: solver_main.o solve.o board.o
+solve: solver_main.o solve.o board.o utils.o
 	$(LINK) -o $@ $^ $(LDFLAGS)
