@@ -94,7 +94,8 @@ std::string Board::DebugString(const State *state) const {
   }
   if (state) {
     for (int i = 0; i < state->num_tiles; ++i) {
-      LOG(1) << i << ": '" << char('a' + state->t[i].type) << "' " << state->t[i].pos << endl;
+      LOG(1) << i << ": '" << char('a' + state->t[i].type) << "' " 
+             << state->t[i].pos << " " << state->t[i].to_erase << endl;
     }
   }
   return s;
@@ -247,7 +248,7 @@ int State::FindWithSkip(int pos, int skip_index) const {
 
 struct ActionInfo {
   Action action;
-  int static_tile_pos;
+  int static_tile_index;
 };
 
 inline int prio_cmp(const void* a, const void* b) {
@@ -300,12 +301,10 @@ int State::Move(
       if (a.exists) {
         LOG(1) << "Added new action" << endl;
         action_infos[num_actions].action = a;
-        action_infos[num_actions].static_tile_pos = lookup_pos;
+        action_infos[num_actions].static_tile_index = static_tile_index;
         ++num_actions;
       }
     }
-    // TODO: We need to apply the moves in prio order.
-
     LOG(1) << "Before sort\n";
     for (int i = 0; i < num_actions; ++i) {
       PrintAction(action_infos[i].action);
@@ -319,13 +318,8 @@ int State::Move(
       const Action& a = action_infos[i].action;
       can_move = false;
       LOG(1) << board.DebugStringWithState(*n);
-      // Here we need to lookup again our moving tile, as its previously
-      // computed index might be out of date. We assume that only one tile is on
-      // curr_pos. While this is generally not true, it will be in our game.
-      int updated_moving_tile_index = n->Find(curr_pos);
-      n->ApplyAction(updated_moving_tile_index,
-                     n->FindWithSkip(action_infos[i].static_tile_pos,
-                                     updated_moving_tile_index),
+      n->ApplyAction(moving_tile_index,
+                     action_infos[i].static_tile_index,
                      a);
       LOG(1) << board.DebugStringWithState(*n);
       if (a.won) return WIN;
@@ -335,6 +329,9 @@ int State::Move(
         break;
       }
     }
+    // TODO: don't call this always.
+    n->EraseAll();
+    LOG(1) << board.DebugStringWithState(*n);
 
     LOG(1) << "check move: " << (can_move ? "Y" : "N") << endl;
     if (can_move) {
@@ -363,8 +360,23 @@ void State::ApplyAction(int moving_tile_index, int static_tile_index,
   if (a.lost) return;
   t[moving_tile_index].type = a.moving_new_animal;
   t[static_tile_index].type = a.static_new_animal;
-  if (a.moving_animal_dies) Erase(moving_tile_index);
-  if (a.static_animal_dies) Erase(static_tile_index);
+  if (a.moving_animal_dies) t[moving_tile_index].to_erase = 1;
+  if (a.static_animal_dies) t[static_tile_index].to_erase = 1;
+  //  if (a.moving_animal_dies) Erase(moving_tile_index);
+  //  if (a.static_animal_dies) Erase(static_tile_index);
+}
+
+void State::EraseAll() {
+  LOG(1) << "EraseAll\n";
+  int num_erase = 0;
+  for (int i = 0, j = 0; j < num_tiles; ++i, ++j) {
+    while (t[j].to_erase) {
+      ++j;
+      ++num_erase;
+    }
+    if (j > i) t[i] = t[j];
+  }
+  num_tiles -= num_erase;
 }
 
 void State::Erase(int tile_index) {

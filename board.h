@@ -25,7 +25,8 @@ static inline int MY_intcmp(const void *aa, const void *bb) {
 }
 
 struct Tile {
-  unsigned int dummy_: 16;
+  unsigned int dummy_: 15;
+  unsigned int to_erase : 1;
   unsigned int pos : 8;
   unsigned int type : 8;
 };
@@ -97,6 +98,7 @@ class State {
   void ApplyAction(
       int moving_tile_index, int static_tile_index, const Action& a);
   void Erase(int tile_index);
+  void EraseAll();
 
   inline void Sort() {
     qsort((void *)t, num_tiles, sizeof(int), MY_intcmp);
