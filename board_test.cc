@@ -24,7 +24,25 @@ class MockRules : public Rules {
       a.won = 0;
       a.lost = 0;
       a.continues = 0;
-      a.prio = 2;
+      a.prio = 3;
+      a.exists = 1;
+      for (int r = 0; r < NUM_RELATIONS; ++r) {
+        rules[a1][a2][r] = a;
+      }
+    }
+    {
+      // f kills a if a moves near it with high prio.
+      int a1 = 'a' - 'a';
+      int a2 = 'f' - 'a';
+      Action a;
+      a.moving_animal_dies = 1;
+      a.static_animal_dies = 0;
+      a.moving_new_animal = a1;
+      a.static_new_animal = a2;
+      a.won = 0;
+      a.lost = 0;
+      a.continues = 0;
+      a.prio = 1;
       a.exists = 1;
       for (int r = 0; r < NUM_RELATIONS; ++r) {
         rules[a1][a2][r] = a;
@@ -43,6 +61,56 @@ class MockRules : public Rules {
       a.lost = 0;
       a.continues = 0;
       a.prio = 2;
+      a.exists = 1;
+      for (int r = 0; r < NUM_RELATIONS; ++r) {
+        rules[a1][a2][r] = a;
+      }
+    }
+    {
+      // j turns 'a' into 'k' if ON and dies.
+      int a1 = 'a' - 'a';
+      int a2 = 'j' - 'a';
+      Action a;
+      a.moving_animal_dies = 0;
+      a.static_animal_dies = 1;
+      a.moving_new_animal = 'k' - 'a';
+      a.static_new_animal = a2;
+      a.won = 0;
+      a.lost = 0;
+      a.continues = 0;
+      a.prio = 2;
+      a.exists = 1;
+      rules[a1][a2][ON] = a;
+    }
+    {
+      // j turns 'l' into 'c' if ON and dies.
+      int a1 = 'l' - 'a';
+      int a2 = 'j' - 'a';
+      Action a;
+      a.moving_animal_dies = 0;
+      a.static_animal_dies = 1;
+      a.moving_new_animal = 'c' - 'a';
+      a.static_new_animal = a2;
+      a.won = 0;
+      a.lost = 0;
+      a.continues = 0;
+      a.prio = 2;
+      a.exists = 1;
+      rules[a1][a2][ON] = a;
+    }
+    {
+      // l kills f if a moves near it.
+      int a1 = 'l' - 'a';
+      int a2 = 'f' - 'a';
+      Action a;
+      a.moving_animal_dies = 0;
+      a.static_animal_dies = 1;
+      a.moving_new_animal = a1;
+      a.static_new_animal = a2;
+      a.won = 0;
+      a.lost = 0;
+      a.continues = 0;
+      a.prio = 0;
       a.exists = 1;
       for (int r = 0; r < NUM_RELATIONS; ++r) {
         rules[a1][a2][r] = a;
@@ -96,9 +164,29 @@ static const char B004[] =
 static const char B005[] =
     "##########"
     "#    d   #"
-    "#      c #"
+    "#     c  #"
     "#   b #  #"
     "# b  a   #"
+    "#  #   c #"
+    "#    #   #"
+    "##########";
+
+static const char B006[] =
+    "##########"
+    "#    d   #"
+    "#     f  #"
+    "#   b #  #"
+    "# b  a   #"
+    "#  #   c #"
+    "#    #   #"
+    "##########";
+
+static const char B007[] =
+    "##########"
+    "#    d   #"
+    "#     f  #"
+    "#   b #  #"
+    "# j  a   #"
     "#  #   c #"
     "#    #   #"
     "##########";
@@ -380,22 +468,147 @@ TEST(TestState, MoveSimple) {
     b.DebugStringWithState(n4));
 }
 
-TEST(TestState, MoveSimple2) {
-  Board b(B005, *RULES);
-  State s(B005);
-  // 'd' turns 'a' into 'e', hence 'c' doesn't kill it.
-  State n1(b, s, 0, State::UP);
-  EXPECT_EQ(
-    "##########\n"
-    "#    d   #\n"
-    "#    e c #\n"
-    "#   b #  #\n"
-    "# b      #\n"
-    "#  #   c #\n"
-    "#    #   #\n"
-    "##########\n",
-    b.DebugStringWithState(n1));
+TEST(TestState, MovePrio) {
+  {
+    Board b(B005, *RULES);
+    State s(B005);
+    // 'd' turns 'a' into 'e', hence 'c' doesn't kill it.
+    State n(b, s, 0, State::UP);
+    EXPECT_EQ(
+              "##########\n"
+              "#    d   #\n"
+              "#    ec  #\n"
+              "#   b #  #\n"
+              "# b      #\n"
+              "#  #   c #\n"
+              "#    #   #\n"
+              "##########\n",
+              b.DebugStringWithState(n));
+  }
+  {
+    Board b(B006, *RULES);
+    State s(B006);
+    // 'f' kills 'a' before 'd' can turn into 'e'.
+    State n(b, s, 0, State::UP);
+    EXPECT_EQ(
+              "##########\n"
+              "#    d   #\n"
+              "#     f  #\n"
+              "#   b #  #\n"
+              "# b      #\n"
+              "#  #   c #\n"
+              "#    #   #\n"
+              "##########\n",
+              b.DebugStringWithState(n));
+  }
 }
+
+TEST(TestState, MoveSwamp) {
+  {
+    const char B007[] =
+      "##########"
+      "#    d   #"
+      "#     f  #"
+      "#   b #  #"
+      "# j  a   #"
+      "#  #   c #"
+      "#    #   #"
+      "##########";
+    Board b(B007, *RULES);
+    State s(B007);
+    // 'j' turns 'a' into 'k' and dies.
+    State n(b, s, 0, State::LEFT);
+    EXPECT_EQ(
+              "##########\n"
+              "#    d   #\n"
+              "#     f  #\n"
+              "#   b #  #\n"
+              "# k      #\n"
+              "#  #   c #\n"
+              "#    #   #\n"
+              "##########\n",
+              b.DebugStringWithState(n));
+  }
+  {
+    const char B008[] =
+      "##########"
+      "#    d   #"
+      "#     f  #"
+      "#     #  #"
+      "# j  b   #"
+      "#  #   c #"
+      "#    #   #"
+      "##########";
+    Board b(B008, *RULES);
+    State s(B008);
+    // 'j' lets through 'b'.
+    State n(b, s, 0, State::LEFT);
+    EXPECT_EQ(
+              "##########\n"
+              "#    d   #\n"
+              "#     f  #\n"
+              "#     #  #\n"
+              "#bj      #\n"
+              "#  #   c #\n"
+              "#    #   #\n"
+              "##########\n",
+              b.DebugStringWithState(n));
+  }
+}
+
+TEST(TestState, MoveMultiActionHighIndex) {
+  {
+    const char B[] =
+      "##########"
+      "#        #"
+      "#        #"
+      "#        #"
+      "#    l  f#"
+      "#      f #"
+      "#        #"
+      "##########";
+    Board b(B, *RULES);
+    State s(B);
+    // 'l' kills both 'f'-s.
+    State n(b, s, 2, State::RIGHT);
+    EXPECT_EQ(
+              "##########\n"
+              "#        #\n"
+              "#        #\n"
+              "#        #\n"
+              "#      l #\n"
+              "#        #\n"
+              "#        #\n"
+              "##########\n",
+              b.DebugStringWithState(n));
+  }
+  {
+    const char B[] =
+      "##########"
+      "#        #"
+      "#        #"
+      "#    l   #"
+      "#        #"
+      "#    jf  #"
+      "#        #"
+      "##########";
+    Board b(B, *RULES);
+    State s(B);
+    // 'l' kills 'f' and then turns into 'c'.
+    State n(b, s, 2, State::DOWN);
+    EXPECT_EQ(
+              "##########\n"
+              "#        #\n"
+              "#        #\n"
+              "#        #\n"
+              "#        #\n"
+              "#    c   #\n"
+              "#        #\n"
+              "##########\n",
+              b.DebugStringWithState(n));
+  }
+}
+
 
 // TEST(TestState, MoveHorizontalFixed) {
 //   {

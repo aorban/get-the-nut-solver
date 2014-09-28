@@ -21,6 +21,19 @@ class Voidify {
 
 static const int INFINITY = 1000;
 
+void PrintAction(const Action& a) {
+  LOG(1) << "exists/won/lost/cont/prio:" 
+         << a.exists << "/" 
+         << a.won << "/" 
+         << a.lost << "/" 
+         << a.continues << "/"
+         << a.prio
+         << "\nmoving: new: " << char('a' + a.moving_new_animal) 
+         << " dies: " << (a.moving_animal_dies ? "Y" : "N")
+         << "\nstatic: new: " << char('a' + a.static_new_animal) 
+         << " dies: " << (a.static_animal_dies ? "Y" : "N") << endl;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Board
 ////////////////////////////////////////////////////////////////////////////////
@@ -78,6 +91,11 @@ std::string Board::DebugString(const State *state) const {
       s += c;
     }
     s += '\n';
+  }
+  if (state) {
+    for (int i = 0; i < state->num_tiles; ++i) {
+      LOG(1) << i << ": '" << char('a' + state->t[i].type) << "' " << state->t[i].pos << endl;
+    }
   }
   return s;
 }
@@ -151,27 +169,27 @@ const int State::DIRECTIONS[] = {-BOARD_X, -1, +1, +BOARD_X};  // 3-dir must wor
 const int State::DIR_LOOKUP[][4][2] = {
   {  // up
     {0, Rules::ON},  // on
-    {State::UP, Rules::AHEAD},  // ahead
-    {State::LEFT, Rules::SIDE}, // side
-    {State::RIGHT, Rules::SIDE}, // side
+    {DIRECTIONS[State::UP], Rules::AHEAD},  // ahead
+    {DIRECTIONS[State::LEFT], Rules::SIDE}, // side
+    {DIRECTIONS[State::RIGHT], Rules::SIDE}, // side
   },
   {  // left
     {0, Rules::ON},  // on
-    {State::LEFT, Rules::AHEAD},  // ahead
-    {State::UP, Rules::SIDE}, // side
-    {State::DOWN, Rules::SIDE}, // side
+    {DIRECTIONS[State::LEFT], Rules::AHEAD},  // ahead
+    {DIRECTIONS[State::UP], Rules::SIDE}, // side
+    {DIRECTIONS[State::DOWN], Rules::SIDE}, // side
   },
   {  // right
     {0, Rules::ON},  // on
-    {State::RIGHT, Rules::AHEAD},  // ahead
-    {State::UP, Rules::SIDE}, // side
-    {State::DOWN, Rules::SIDE}, // side
+    {DIRECTIONS[State::RIGHT], Rules::AHEAD},  // ahead
+    {DIRECTIONS[State::UP], Rules::SIDE}, // side
+    {DIRECTIONS[State::DOWN], Rules::SIDE}, // side
   },
   {  // down
     {0, Rules::ON},  // on
-    {State::DOWN, Rules::AHEAD},  // ahead
-    {State::LEFT, Rules::SIDE}, // side
-    {State::RIGHT, Rules::SIDE}, // side
+    {DIRECTIONS[State::DOWN], Rules::AHEAD},  // ahead
+    {DIRECTIONS[State::LEFT], Rules::SIDE}, // side
+    {DIRECTIONS[State::RIGHT], Rules::SIDE}, // side
   },
 };
 
@@ -217,6 +235,25 @@ int State::Find(int pos) const {
   return -1;
 }
 
+int State::FindWithSkip(int pos, int skip_index) const {
+  for (int i = 0; i < num_tiles; ++i) {
+    if (i == skip_index) continue;
+    if (t[i].pos == pos) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+struct ActionInfo {
+  Action action;
+  int static_tile_pos;
+};
+
+inline int prio_cmp(const void* a, const void* b) {
+  return ((ActionInfo*)a)->action.prio > ((ActionInfo*)b)->action.prio;
+}
+
 int State::Move(
     const Board &board, int moving_tile_index, int dir, State *n) const {
   const int move = DIRECTIONS[dir];
@@ -231,23 +268,25 @@ int State::Move(
   }
   Tile* moving_tile = &(n->t[moving_tile_index]);
   int curr_pos = moving_tile->pos;
+  int orig_moving_type = moving_tile->type;
   bool can_move = true;
   LOG(INFO) << board.DebugStringWithState(*n);
-  Action actions[4];
-  int static_tile_indices[4];
+  ActionInfo action_infos[4];
   while (can_move) {
     // We just landed on curr_pos. We check all the possible rules.
     LOG(1) << "Landed on tile " << curr_pos << endl;
     int num_actions = 0;
     for (int i = 0; i < 4; ++i) {
-      const int lookup_dir = DIRECTIONS[DIR_LOOKUP[dir][i][0]];
+      const int lookup_dir = DIR_LOOKUP[dir][i][0];
       const int relation = DIR_LOOKUP[dir][i][1];
       int lookup_pos = curr_pos + lookup_dir;
       // Don't lookup rule if there is a wall there
       if (board.b[lookup_pos] != BLANK) {
         continue;
       }
-      int static_tile_index = n->Find(lookup_pos);
+      LOG(1) << "checking tile at " << lookup_pos <<  " dir: " << lookup_dir 
+             << " rel: " << relation << std::endl;
+      int static_tile_index = n->FindWithSkip(lookup_pos, moving_tile_index);
       if (static_tile_index == -1) continue; 
       LOG(1) << "tile at " << lookup_pos <<  " dir: " << lookup_dir 
              << " |" << char('a' + n->t[static_tile_index].type) << "|" 
@@ -260,22 +299,39 @@ int State::Move(
       }
       if (a.exists) {
         LOG(1) << "Added new action" << endl;
-        actions[num_actions] = a;
-        static_tile_indices[num_actions] = static_tile_index;
+        action_infos[num_actions].action = a;
+        action_infos[num_actions].static_tile_pos = lookup_pos;
         ++num_actions;
       }
     }
     // TODO: We need to apply the moves in prio order.
+
+    LOG(1) << "Before sort\n";
     for (int i = 0; i < num_actions; ++i) {
-      const Action& a = actions[i];
+      PrintAction(action_infos[i].action);
+    }
+    qsort(action_infos, num_actions, sizeof(ActionInfo), prio_cmp);
+    LOG(1) << "After sort\n";
+    for (int i = 0; i < num_actions; ++i) {
+      PrintAction(action_infos[i].action);
+    }
+    for (int i = 0; i < num_actions; ++i) {
+      const Action& a = action_infos[i].action;
       can_move = false;
-      LOG(INFO) << board.DebugStringWithState(*n);
-      n->ApplyAction(moving_tile_index, static_tile_indices[i], a);
-      LOG(INFO) << board.DebugStringWithState(*n);
+      LOG(1) << board.DebugStringWithState(*n);
+      // Here we need to lookup again our moving tile, as its previously
+      // computed index might be out of date. We assume that only one tile is on
+      // curr_pos. While this is generally not true, it will be in our game.
+      int updated_moving_tile_index = n->Find(curr_pos);
+      n->ApplyAction(updated_moving_tile_index,
+                     n->FindWithSkip(action_infos[i].static_tile_pos,
+                                     updated_moving_tile_index),
+                     a);
+      LOG(1) << board.DebugStringWithState(*n);
       if (a.won) return WIN;
       if (a.moving_animal_dies || 
-          a.moving_new_animal != moving_tile->type) {
-        // Stop applying the rest of the actions.
+          a.moving_new_animal != orig_moving_type) {
+        // Stop applying the rest of the action_infos.
         break;
       }
     }
@@ -300,18 +356,6 @@ int State::Move(
   return 0;
 }
 
-void PrintAction(const Action& a) {
-  LOG(1) << "exists/won/lost/cont:" 
-         << a.exists << "/" 
-         << a.won << "/" 
-         << a.lost << "/" 
-         << a.continues 
-         << "\nmoving: new: " << char('a' + a.moving_new_animal) 
-         << " dies: " << (a.moving_animal_dies ? "Y" : "N")
-         << "\nstatic: new: " << char('a' + a.static_new_animal) 
-         << " dies: " << (a.static_animal_dies ? "Y" : "N") << endl;
-}
-
 void State::ApplyAction(int moving_tile_index, int static_tile_index,
                        const Action& a) {
   LOG(1) << "ApplyAction: " << moving_tile_index << " " << static_tile_index << endl;
@@ -324,6 +368,7 @@ void State::ApplyAction(int moving_tile_index, int static_tile_index,
 }
 
 void State::Erase(int tile_index) {
+  LOG(1) << "Erasing " << tile_index << " " << num_tiles << endl;
   for (int i = tile_index + 1; i < num_tiles; ++i) {
     t[i - 1] = t[i];
   }
