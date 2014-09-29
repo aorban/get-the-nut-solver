@@ -65,8 +65,6 @@ TEST(RulesTest, Default) {
     EXPECT_TRUE(a.exists);
     EXPECT_EQ(TILE("SQR"), a.moving_new_animal);
     EXPECT_EQ(TILE("HOG"), a.static_new_animal);
-    EXPECT_FALSE(a.moving_animal_dies);
-    EXPECT_FALSE(a.static_animal_dies);
     EXPECT_FALSE(a.won);
     EXPECT_FALSE(a.lost);
     EXPECT_FALSE(a.continues);
@@ -83,8 +81,6 @@ TEST(RulesTest, Default) {
     EXPECT_TRUE(a.exists);
     EXPECT_EQ(TILE("SWM"), a.moving_new_animal);
     EXPECT_EQ(TILE("HOG"), a.static_new_animal);
-    EXPECT_FALSE(a.moving_animal_dies);
-    EXPECT_FALSE(a.static_animal_dies);
     EXPECT_FALSE(a.won);
     EXPECT_FALSE(a.lost);
     EXPECT_FALSE(a.continues);
@@ -131,6 +127,14 @@ TEST_F(RealRulesTest, Hog) {
     Action a = r->GetAction(TILE("SQR"), TILE("HOG"), Rules::SIDE);
     EXPECT_TRUE(a.exists);
     EXPECT_TRUE(a.lost);
+  }
+  {
+    // Hog kills Emese.
+    Action a = r->GetAction(TILE("MSE"), TILE("HOG"), Rules::AHEAD);
+    EXPECT_TRUE(a.exists);
+    EXPECT_FALSE(a.lost);
+    EXPECT_EQ(TILE("HOG"), a.static_new_animal);
+    EXPECT_EQ(TILE("---"), a.moving_new_animal);
   }
 }
 

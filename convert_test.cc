@@ -7,6 +7,10 @@ TEST(ConvertTest, Simple) {
   EXPECT_EQ('a', TriToCode("ACG"));
 }
 
+TEST(ConvertTest, Death) {
+  EXPECT_EQ(TriToCode("---"), TriToCode("END"));
+}
+
 TEST(ConvertTest, Reverse) {
   for (char c = 'a'; c < TriToCode("END"); ++c) {
     const char *tri = CodeToTri(c);

@@ -27,7 +27,7 @@ static inline int MY_intcmp(const void *aa, const void *bb) {
 
 struct Tile {
   unsigned int dummy_: 15;
-  unsigned int to_erase : 1;
+  unsigned int to_erase: 1;
   unsigned int pos : 8;
   unsigned int type : 8;
 };

@@ -12,25 +12,21 @@ using namespace std;
 
 string PrintAction(const Action& a) {
   stringstream ss;
-  ss << "exists/won/lost/cont/prio:" 
-     << a.exists << "/" 
-     << a.won << "/" 
-     << a.lost << "/" 
+  ss << "exists/won/lost/cont/prio:"
+     << a.exists << "/"
+     << a.won << "/"
+     << a.lost << "/"
      << a.continues << "/"
      << a.prio
-     << "\nmoving: new: " << char('a' + a.moving_new_animal) 
+     << "\nmoving: new: " << char('a' + a.moving_new_animal)
      << "(" << CodeToTri(char('a' + a.moving_new_animal)) << ")"
-     << " dies: " << (a.moving_animal_dies ? "Y" : "N")
-     << "\nstatic: new: " << char('a' + a.static_new_animal) 
-     << "(" << CodeToTri(char('a' + a.static_new_animal)) << ")"
-     << " dies: " << (a.static_animal_dies ? "Y" : "N") << endl;
+     << "\nstatic: new: " << char('a' + a.static_new_animal)
+     << "(" << CodeToTri(char('a' + a.static_new_animal)) << ")" << endl;
   return ss.str();
 }
 
 void Rules::Initialize() {
   Action action;
-  action.moving_animal_dies = 0;
-  action.static_animal_dies = 0;
   action.won = 0;
   action.lost = 0;
   action.continues = 0;
@@ -85,8 +81,6 @@ Rules::Rules(const std::string& csv_file) {
     *((int*)&action) = 0;
     action.exists = 1;
     action.prio = atoi(values[6].c_str());
-    action.moving_animal_dies = 0;
-    action.static_animal_dies = 0;
 
     int animal1 = TriToCode(values[1].c_str()) - 'a';
     if (animal1 < 0 || animal1 > NUM_ANIMALS) {
@@ -106,9 +100,7 @@ Rules::Rules(const std::string& csv_file) {
     const string a2 = values[5];
     if (a1 == "L" || a2 == "L") action.lost = 1;
     if (a1 == "W" || a2 == "W") action.won = 1;
-    if (a1 == "---") {
-      action.moving_animal_dies = 1;
-    } else if (a1.length() == 3) {
+    if (a1.length() == 3) {
       char code = TriToCode(a1.c_str()) - 'a';
       if (code < 0 || code > NUM_ANIMALS) {
         cout << "Wrong animal target1: " << a1.c_str() << '/' << line << endl;
@@ -116,9 +108,7 @@ Rules::Rules(const std::string& csv_file) {
       }
       action.moving_new_animal = code;
     }
-    if (a2 == "---") {
-      action.static_animal_dies = 1;
-    } else if (a2.length() == 3) {
+    if (a2.length() == 3) {
       char code = TriToCode(a2.c_str()) - 'a';
       if (code < 0 || code > NUM_ANIMALS) {
         cout << "Wrong animal target2: " << a2.c_str() << '/' << line << endl;
@@ -147,12 +137,6 @@ Rules::Rules(const std::string& csv_file) {
     }
     // Symmetry.
     if (values[7] == "Y") {
-      {
-        // Swap deaths.
-        int tmp = action.moving_animal_dies;
-        action.moving_animal_dies = action.static_animal_dies;
-        action.static_animal_dies = tmp;
-      }
       {
         // Swap new animals.
         int tmp = action.moving_new_animal;

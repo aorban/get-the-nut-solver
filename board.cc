@@ -308,8 +308,7 @@ int State::Move(
       LOG(2) << board.DebugStringWithState(*n);
       if (a.lost) return LOSE;
       if (a.won) return WIN;
-      if (a.moving_animal_dies || 
-          a.moving_new_animal != orig_moving_type) {
+      if (a.moving_new_animal != orig_moving_type) {
         // Stop applying the rest of the action_infos.
         break;
       }
@@ -345,10 +344,9 @@ void State::ApplyAction(int moving_tile_index, int static_tile_index,
   if (a.lost) return;
   t[moving_tile_index].type = a.moving_new_animal;
   t[static_tile_index].type = a.static_new_animal;
-  if (a.moving_animal_dies) t[moving_tile_index].to_erase = 1;
-  if (a.static_animal_dies) t[static_tile_index].to_erase = 1;
-  //  if (a.moving_animal_dies) Erase(moving_tile_index);
-  //  if (a.static_animal_dies) Erase(static_tile_index);
+  // TODO: Get rid of this.
+  if (a.moving_new_animal == (TriToCode("---") - 'a')) t[moving_tile_index].to_erase = 1;
+  if (a.static_new_animal == (TriToCode("---") - 'a')) t[static_tile_index].to_erase = 1;
 }
 
 void State::EraseAll() {

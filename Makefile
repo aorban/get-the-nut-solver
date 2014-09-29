@@ -52,9 +52,9 @@ rules_test: rules_test.o rules.o utils.o $(GTEST)
 ################################################################################
 
 board.o: board.cc board.h rules.o rules.h log.h convert.h
-	$(CXX) $(CCFLAGS) -c $< -o $@ 
+	$(CXX) $(CCFLAGS) -c $< -o $@
 
-board_test.o: board_test.cc board.h
+board_test.o: board_test.cc board.h convert.h
 	$(CXX) $(CCFLAGS) -c $< -o $@
 
 board_test: board_test.o board.o rules.o utils.o $(GTEST)
@@ -75,7 +75,7 @@ bitfield: bitfield.c
 solve.o: solve.cc solve.h board.h log.h convert.h
 	$(CXX) $(CCFLAGS) -c $< -o $@
 
-solve_test.o: solve_test.cc solve.h testboards.h
+solve_test.o: solve_test.cc solve.h testboards.h convert.h
 	$(CXX) $(CCFLAGS) -c $< -o $@
 
 solve_test: solve.o solve_test.o board.o rules.o utils.o $(GTEST)

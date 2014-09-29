@@ -19,7 +19,7 @@ static char TriToCode(const char *tri) {
   if (strncmp(tri, "SNK", 3) == 0) return 'm';
   if (strncmp(tri, "PRC", 3) == 0) return 'n';
   if (strncmp(tri, "FSN", 3) == 0) return 'o';  // Full snake
-  if (strncmp(tri, "END", 3) == 0) return 'p';  // END
+  if (strncmp(tri, "END", 3) == 0 || strncmp(tri, "---", 3) == 0) return 'p';  // END. Also used for DEATH.
   return '?';
 }
 
