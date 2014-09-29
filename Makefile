@@ -70,7 +70,7 @@ bitfield: bitfield.c
 # solve
 ################################################################################
 
-solve.o: solve.cc solve.h board.h log.h
+solve.o: solve.cc solve.h board.h log.h convert.h
 	$(CXX) $(CCFLAGS) -c $< -o $@
 
 solve_test.o: solve_test.cc solve.h testboards.h
@@ -79,5 +79,5 @@ solve_test.o: solve_test.cc solve.h testboards.h
 solve_test: solve.o solve_test.o board.o rules.o utils.o $(GTEST)
 	$(LINK) -o $@ $^ $(LDFLAGS)
 
-solve: solver_main.o solve.o board.o utils.o
+solve: solver_main.o solve.o board.o utils.o rules.o
 	$(LINK) -o $@ $^ $(LDFLAGS)
