@@ -254,6 +254,7 @@ int State::Move(
   ActionInfo action_infos[4];
   // The (other) tile we are stepping on.
   int tile_on_index = -1;
+  int num_woves_around_bear = 0;
   while (true) {
     // We just landed on curr_pos. We check all the possible rules.
     LOG(2) << "Landed on tile " << curr_pos << endl;
@@ -291,6 +292,10 @@ int State::Move(
         action_infos[num_actions].action = a;
         action_infos[num_actions].static_tile_index = static_tile_index;
         ++num_actions;
+        if (strcmp(CodeToTri('a' + moving_tile->type), "BER") == 0 &&
+            strcmp(CodeToTri('a' + n->t[static_tile_index].type), "WLF") == 0) {
+          ++num_woves_around_bear;
+        }
       }
     }
     if (num_actions) break;
@@ -304,31 +309,39 @@ int State::Move(
     curr_pos = next_pos;
   }
 
-  LOG(2) << "Before sort\n";
-  for (int i = 0; i < num_actions; ++i) {
-    LOG(2) << PrintAction(action_infos[i].action);
-  }
-  qsort(action_infos, num_actions, sizeof(ActionInfo), prio_cmp);
-  LOG(2) << "After sort\n";
-  for (int i = 0; i < num_actions; ++i) {
-    LOG(2) << PrintAction(action_infos[i].action);
-  }
-
-  for (int i = 0; i < num_actions; ++i) {
-    const Action& a = action_infos[i].action;
-    const int &static_tile_index = action_infos[i].static_tile_index;
-    LOG(2) << board.DebugStringWithState(*n);
-    if (a.lost) return LOSE;
-    if (a.won) return WIN;
-    LOG(1) << "ApplyAction: " << moving_tile_index << " " << static_tile_index << endl;
-    LOG(1) << PrintAction(a);
-    int orig_moving_type = moving_tile->type;
-    n->t[moving_tile_index].type = a.moving_new_animal;
-    n->t[static_tile_index].type = a.static_new_animal;
-    LOG(2) << board.DebugStringWithState(*n);
-    if (a.moving_new_animal != orig_moving_type) {
-      // Stop applying the rest of the action_infos.
-      break;
+  // Special case when bear is surrounded by wolves
+  if (num_woves_around_bear == 3) {
+    LOG(-5) << "BEAR SURROUNDED!" << endl;
+    moving_tile->type = TriToCode("END") - 'a';
+  } else {
+    // Sort actions by prio
+    LOG(2) << "Before sort\n";
+    for (int i = 0; i < num_actions; ++i) {
+      LOG(2) << PrintAction(action_infos[i].action);
+    }
+    qsort(action_infos, num_actions, sizeof(ActionInfo), prio_cmp);
+    LOG(2) << "After sort\n";
+    for (int i = 0; i < num_actions; ++i) {
+      LOG(2) << PrintAction(action_infos[i].action);
+    }
+    // Apply actions
+    for (int i = 0; i < num_actions; ++i) {
+      const Action& a = action_infos[i].action;
+      const int &static_tile_index = action_infos[i].static_tile_index;
+      LOG(2) << board.DebugStringWithState(*n);
+      if (a.lost) return LOSE;
+      if (a.won) return WIN;
+      LOG(1) << "ApplyAction: " << moving_tile_index << " " 
+             << static_tile_index << endl;
+      LOG(1) << PrintAction(a);
+      int orig_moving_type = moving_tile->type;
+      n->t[moving_tile_index].type = a.moving_new_animal;
+      n->t[static_tile_index].type = a.static_new_animal;
+      LOG(2) << board.DebugStringWithState(*n);
+      if (a.moving_new_animal != orig_moving_type) {
+        // Stop applying the rest of the action_infos.
+        break;
+      }
     }
   }
   n->Sort();

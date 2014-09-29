@@ -478,6 +478,59 @@ TEST(TestState, MovePrio) {
   }
 }
 
+TEST(TestState, MoveBearSurroundedByWolves) {
+  {
+    const char B[] =
+      "##########"
+      "#        #"
+      "#        #"
+      "#      f #"
+      "#   g   f#"
+      "#      f #"
+      "#        #"
+      "##########";
+    Board b(B, REAL_RULES);
+    State s(B);
+    // bear dies if surrounded by wolves.
+    State n(b, s, 3, State::RIGHT);
+    EXPECT_EQ(
+              "##########\n"
+              "#        #\n"
+              "#        #\n"
+              "#      f #\n"
+              "#       f#\n"
+              "#      f #\n"
+              "#        #\n"
+              "##########\n",
+              b.DebugStringWithState(n));
+  }
+  {
+    const char B[] =
+      "##########"
+      "#        #"
+      "#        #"
+      "#      f #"
+      "#   g   f#"
+      "#        #"
+      "#        #"
+      "##########";
+    Board b(B, REAL_RULES);
+    State s(B);
+    // bear is able to kill 2 wolves.
+    State n(b, s, 2, State::RIGHT);
+    EXPECT_EQ(
+              "##########\n"
+              "#        #\n"
+              "#        #\n"
+              "#        #\n"
+              "#      g #\n"
+              "#        #\n"
+              "#        #\n"
+              "##########\n",
+              b.DebugStringWithState(n));
+  }
+}
+
 TEST(TestState, MoveSwamp) {
   {
     const char B007[] =
