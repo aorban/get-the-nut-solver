@@ -95,9 +95,6 @@ class State {
   // Find the tile occupying a position. Return index or -1.
   int Find(int pos) const;
 
-  void ApplyAction(
-      int moving_tile_index, int static_tile_index, const Action& a);
-
   inline void Sort() {
     qsort((void *)t, num_tiles, sizeof(int), MY_intcmp);
   }

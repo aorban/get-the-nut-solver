@@ -243,8 +243,6 @@ int State::Move(
   }
   Tile* moving_tile = &(n->t[moving_tile_index]);
   int curr_pos = moving_tile->pos;
-  int orig_moving_type = moving_tile->type;
-  bool end_of_move = false;
   LOG(1) << board.DebugStringWithState(*n);
   int num_actions = 0;
   ActionInfo action_infos[4];
@@ -312,14 +310,16 @@ int State::Move(
 
   for (int i = 0; i < num_actions; ++i) {
     const Action& a = action_infos[i].action;
-    end_of_move = true;
-    LOG(2) << board.DebugStringWithState(*n);
-    n->ApplyAction(moving_tile_index,
-                   action_infos[i].static_tile_index,
-                   a);
+    const int &static_tile_index = action_infos[i].static_tile_index;
     LOG(2) << board.DebugStringWithState(*n);
     if (a.lost) return LOSE;
     if (a.won) return WIN;
+    LOG(1) << "ApplyAction: " << moving_tile_index << " " << static_tile_index << endl;
+    LOG(1) << PrintAction(a);
+    int orig_moving_type = moving_tile->type;
+    n->t[moving_tile_index].type = a.moving_new_animal;
+    n->t[static_tile_index].type = a.static_new_animal;
+    LOG(2) << board.DebugStringWithState(*n);
     if (a.moving_new_animal != orig_moving_type) {
       // Stop applying the rest of the action_infos.
       break;
@@ -330,15 +330,6 @@ int State::Move(
   LOG(1) << board.DebugStringWithState(*n);
   LOG(2) << "end of move\n";
   return 0;
-}
-
-void State::ApplyAction(int moving_tile_index, int static_tile_index,
-                       const Action& a) {
-  LOG(1) << "ApplyAction: " << moving_tile_index << " " << static_tile_index << endl;
-  LOG(1) << PrintAction(a);
-  if (a.lost) return;
-  t[moving_tile_index].type = a.moving_new_animal;
-  t[static_tile_index].type = a.static_new_animal;
 }
 
 void State::Hash(HashValue hash) const {
