@@ -196,8 +196,9 @@ void State::Initialize(const char *p) {
     const char c = p[i];
     if (c >= 'a' && c <= 'a' + ('Z'-'A')) {
       const int type = c - 'a';
+      if (type == TriToCode("---") - 'a') continue;
       if (num_tiles + 1 >= MAX_TILES) {
-        printf("Tile too high: '%c'. Increase MAX_TILES.", c);
+        printf("Tile too high: '%c'. Increase MAX_TILES.\n", c);
         exit(10);
       }
       t[num_tiles].pos = i;
