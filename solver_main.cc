@@ -65,16 +65,16 @@ int main(int argc, char **argv) {
   for (int i = 0; i < sol_moves.size(); ++i) {
     cout << sol_moves[i] << endl;
   }
-  std::cout << "num_moves: "
-    << res.num_moves << std::endl;
-  std::cout << "num_visited_states: "
-    << res.num_visited_states << std::endl;
-  std::cout << "num_visited_hit_improve: "
-    << res.num_visited_hit_improve << std::endl;
-  std::cout << "num_visited_hit_drop: "
-    << res.num_visited_hit_drop << std::endl;
-  std::cout << "max_mem_state: "
-    << res.max_mem_state << std::endl;
+  // std::cout << "num_moves: "
+  //   << res.num_moves << std::endl;
+  // std::cout << "num_visited_states: "
+  //   << res.num_visited_states << std::endl;
+  // std::cout << "num_visited_hit_improve: "
+  //   << res.num_visited_hit_improve << std::endl;
+  // std::cout << "num_visited_hit_drop: "
+  //   << res.num_visited_hit_drop << std::endl;
+  // std::cout << "max_mem_state: "
+  //   << res.max_mem_state << std::endl;
 
   if (!res.success) {
     return 0;

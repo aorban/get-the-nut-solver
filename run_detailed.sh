@@ -1,21 +1,21 @@
 #/bin/bash
 rm $1
 
-echo "ACG - 'a'" >> $1
-echo "SQR - 'b'" >> $1
-echo "HOG - 'c'" >> $1
-echo "MSE - 'd'" >> $1
-echo "ACN - 'e'" >> $1
-echo "WLF - 'f'" >> $1
-echo "BER - 'g'" >> $1
-echo "TPP - 'h'" >> $1
-echo "ALG - 'i'" >> $1
-echo "SWM - 'j'" >> $1
-echo "MSS - 'k'  // Mouse in swamp" >> $1
-echo "HOS - 'l'  // Hog in swamp" >> $1
-echo "SNK - 'm'" >> $1
-echo "PRC - 'n'" >> $1
-echo "FSN - 'o'  // Full snake" >> $1
+echo "ACG - 'GOLDEN ACORN'" >> $1
+echo "SQR - 'SQUIRREL'" >> $1
+echo "HOG - 'HOG'" >> $1
+echo "MSE - 'MOUSE'" >> $1
+echo "ACN - 'ACORN'" >> $1
+echo "WLF - 'WOLF'" >> $1
+echo "BER - 'BEAR'" >> $1
+echo "TPP - 'TRAP'" >> $1
+echo "ALG - 'ALLIGATOR'" >> $1
+echo "SWM - 'SWAMP'" >> $1
+echo "MSS - 'MOUSE IN SWAMP'" >> $1
+echo "HOS - 'HOG IN SWAMP'" >> $1
+echo "SNK - 'SNAKE'" >> $1
+echo "PRC - 'PORCUPINE'" >> $1
+echo "FSN - 'SLEEPING SNAKE'" >> $1
 
 
 for i in `ls levels/P*L*`
