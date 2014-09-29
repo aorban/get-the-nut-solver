@@ -73,8 +73,8 @@ std::string Board::DebugString(const State *state) const {
   }
   if (state) {
     for (int i = 0; i < state->num_tiles; ++i) {
-      LOG(1) << i << ": '" << char('a' + state->t[i].type) << "' " 
-             << state->t[i].pos << " " << state->t[i].to_erase << endl;
+      LOG(1) << i << ": '" << char('a' + state->t[i].type) << "' "
+             << state->t[i].pos << endl;
     }
   }
   return s;
@@ -202,7 +202,6 @@ void State::Initialize(const char *p) {
       }
       t[num_tiles].pos = i;
       t[num_tiles].type = type;
-      t[num_tiles].to_erase = 0;
       ++num_tiles;
     }
   }
@@ -313,10 +312,6 @@ int State::Move(
         break;
       }
     }
-    if (num_actions > 0) {
-      n->EraseAll();
-      LOG(2) << board.DebugStringWithState(*n);
-    }
     LOG(2) << "end of move: " << (end_of_move ? "Y" : "N") << endl;
     if (!end_of_move) {
       // Check that we can make the next move
@@ -332,6 +327,7 @@ int State::Move(
     }
   }
   n->Sort();
+  while (n->t[n->num_tiles-1].type == TriToCode("---") - 'a') --n->num_tiles;
   LOG(1) << board.DebugStringWithState(*n);
   LOG(2) << "end of move\n";
   return 0;
@@ -344,30 +340,6 @@ void State::ApplyAction(int moving_tile_index, int static_tile_index,
   if (a.lost) return;
   t[moving_tile_index].type = a.moving_new_animal;
   t[static_tile_index].type = a.static_new_animal;
-  // TODO: Get rid of this.
-  if (a.moving_new_animal == (TriToCode("---") - 'a')) t[moving_tile_index].to_erase = 1;
-  if (a.static_new_animal == (TriToCode("---") - 'a')) t[static_tile_index].to_erase = 1;
-}
-
-void State::EraseAll() {
-  LOG(1) << "EraseAll\n";
-  int num_erase = 0;
-  for (int i = 0, j = 0; j < num_tiles; ++i, ++j) {
-    while (t[j].to_erase) {
-      ++j;
-      ++num_erase;
-    }
-    if (j > i) t[i] = t[j];
-  }
-  num_tiles -= num_erase;
-}
-
-void State::Erase(int tile_index) {
-  LOG(1) << "Erasing " << tile_index << " " << num_tiles << endl;
-  for (int i = tile_index + 1; i < num_tiles; ++i) {
-    t[i - 1] = t[i];
-  }
-  --num_tiles;
 }
 
 void State::Hash(HashValue hash) const {
