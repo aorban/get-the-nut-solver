@@ -1,3 +1,6 @@
+#ifndef GTN_LOG_H_
+#define GTN_LOG_H_
+
 #define DEBUG 0
 
 class Voidify {
@@ -9,3 +12,4 @@ class Voidify {
 };
 #define LOG(x) (x > DEBUG) ? (void)0 : Voidify() & std::cout
 
+#endif
