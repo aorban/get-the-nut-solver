@@ -17,11 +17,9 @@ Ruleset,Moving animal,Static animal,Relation,Action moving animal,Action static 
 3,SQR,ALG,DC,L,N,0,Y
 3,SQR,SWM,ON,L,N,0,N
 3,MSE,ALG,DC,---,N,0,Y
-3,MSE,SWM,ON,MSS,N,0,N
-3,HOG,SWM,ON,HOS,N,0,N
+3,MSE,SWM,ON,MSS,---,0,N
+3,HOG,SWM,ON,HOS,---,0,N
 3,HOG,ALG,DC,---,N,0,Y
-3,ALG,SWM,ON,C,N,0,N
-3,HOG,MSS,DC,N,SWM,0,N
 3,ALG,MSS,DC,N,SWM,0,N
 3,ALG,HOS,DC,N,SWM,0,N
 4,SQR,SNK,DC,L,FSN,0,Y
@@ -30,5 +28,5 @@ Ruleset,Moving animal,Static animal,Relation,Action moving animal,Action static 
 4,MSE,PRC,AHEAD,---,N,0,Y
 4,HOG,SNK,DC,N,---,0,Y
 4,HOG,FSN,DC,N,---,0,N
-4,PRC,SNK,AHEAD,N,---,0,N
-4,PRC,FSN,AHEAD,N,---,0,N
+4,PRC,SNK,AHEAD,N,---,0,Y
+4,PRC,FSN,AHEAD,N,---,0,Y
