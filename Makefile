@@ -27,6 +27,8 @@ clean:
 	rm -f *.o
 	rm -f *.s
 	rm -f *_test
+	rm -f solve
+	rm -f RESULTS.csv
 
 $(GTEST): force_look
 	$(ECHO) looking into gtest/src : $(MAKE) $(MFLAGS)
