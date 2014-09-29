@@ -148,30 +148,31 @@ const int State::DOWN;
 const char State::DIRNAME[] = "ULRD";
 const int State::DIRECTIONS[] = {-BOARD_X, -1, +1, +BOARD_X};  // 3-dir must work!
 
+// ON must be first, after that starting from UP and then clockwise.
 const int State::DIR_LOOKUP[][4][2] = {
   {  // up
     {0, Rules::ON},  // on
     {DIRECTIONS[State::UP], Rules::AHEAD},  // ahead
-    {DIRECTIONS[State::LEFT], Rules::SIDE}, // side
     {DIRECTIONS[State::RIGHT], Rules::SIDE}, // side
+    {DIRECTIONS[State::LEFT], Rules::SIDE}, // side
   },
   {  // left
     {0, Rules::ON},  // on
-    {DIRECTIONS[State::LEFT], Rules::AHEAD},  // ahead
     {DIRECTIONS[State::UP], Rules::SIDE}, // side
     {DIRECTIONS[State::DOWN], Rules::SIDE}, // side
+    {DIRECTIONS[State::LEFT], Rules::AHEAD},  // ahead
   },
   {  // right
     {0, Rules::ON},  // on
-    {DIRECTIONS[State::RIGHT], Rules::AHEAD},  // ahead
     {DIRECTIONS[State::UP], Rules::SIDE}, // side
+    {DIRECTIONS[State::RIGHT], Rules::AHEAD},  // ahead
     {DIRECTIONS[State::DOWN], Rules::SIDE}, // side
   },
   {  // down
     {0, Rules::ON},  // on
+    {DIRECTIONS[State::RIGHT], Rules::SIDE}, // side
     {DIRECTIONS[State::DOWN], Rules::AHEAD},  // ahead
     {DIRECTIONS[State::LEFT], Rules::SIDE}, // side
-    {DIRECTIONS[State::RIGHT], Rules::SIDE}, // side
   },
 };
 
@@ -224,8 +225,13 @@ struct ActionInfo {
 };
 
 inline int prio_cmp(const void* a, const void* b) {
-  return ((ActionInfo*)a)->action.prio - ((ActionInfo*)b)->action.prio;
+  return ((ActionInfo*)a)->action.prio - ((ActionInfo*)b)->action.prio 
+    ? ((ActionInfo*)a)->action.prio - ((ActionInfo*)b)->action.prio
+    // Makes it stable.
+    : ((ActionInfo*)a-(ActionInfo*)b);
 }
+
+
 
 int State::Move(
     const Board &board, int moving_tile_index, int dir, State *n) const {

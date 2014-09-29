@@ -9,6 +9,8 @@
 
 #define TILE(X) (TriToCode(X) - 'a')
 
+static const Rules REAL_RULES = Rules("rules-real.csv");
+
 class MockRules : public Rules {
  public:
   MockRules() : Rules() {
@@ -446,6 +448,31 @@ TEST(TestState, MovePrio) {
               "# b      #\n"
               "#  #   c #\n"
               "#    #   #\n"
+              "##########\n",
+              b.DebugStringWithState(n));
+  }
+  {
+    const char B[] =
+      "##########"
+      "#        #"
+      "#        #"
+      "#      d #"
+      "#   m   d#"
+      "#        #"
+      "#        #"
+      "##########";
+    Board b(B, REAL_RULES);
+    State s(B);
+    // 'm' eats top 'd' and then gets full.
+    State n(b, s, 2, State::RIGHT);
+    EXPECT_EQ(
+              "##########\n"
+              "#        #\n"
+              "#        #\n"
+              "#        #\n"
+              "#      od#\n"
+              "#        #\n"
+              "#        #\n"
               "##########\n",
               b.DebugStringWithState(n));
   }
