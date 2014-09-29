@@ -497,7 +497,7 @@ SOLUTION:Y (4)
 num_moves: 227
 num_visited_states: 37
 num_visited_hit_improve: 0
-num_visited_hit_drop: 148
+num_visited_hit_drop: 149
 max_mem_state: 17
 ------------------------------
 levels/P1L08
@@ -8067,7 +8067,7 @@ SOLUTION:Y (19)
 num_moves: 348316
 num_visited_states: 22371
 num_visited_hit_improve: 0
-num_visited_hit_drop: 279015
+num_visited_hit_drop: 279393
 max_mem_state: 2904
 ------------------------------
 levels/P2L27
@@ -9679,7 +9679,7 @@ SOLUTION:Y (23)
 num_moves: 7908
 num_visited_states: 693
 num_visited_hit_improve: 0
-num_visited_hit_drop: 6548
+num_visited_hit_drop: 6549
 max_mem_state: 91
 ------------------------------
 levels/P2L36
@@ -13492,10 +13492,10 @@ SOLUTION:Y (12)
 (2,3)-ALG-D
 (2,7)-SQR-L
 
-num_moves: 9802
-num_visited_states: 744
+num_moves: 9814
+num_visited_states: 745
 num_visited_hit_improve: 0
-num_visited_hit_drop: 8479
+num_visited_hit_drop: 8490
 max_mem_state: 165
 ------------------------------
 levels/P3L27
@@ -15898,16 +15898,7 @@ levels/P4L02
 ##########
 ##########
 ##########
-## m#  d##
-#a      b#
-##########
-##########
-##########
-
-##########
-##########
-##########
-## m#   ##
+##m #   ##
 #a     db#
 ##########
 ##########
@@ -15916,7 +15907,7 @@ levels/P4L02
 ##########
 ##########
 ##########
-## o#   ##
+##o #   ##
 #a      b#
 ##########
 ##########
@@ -15925,24 +15916,23 @@ levels/P4L02
 ##########
 ##########
 ##########
-## o#   ##
+##o #   ##
 #ab      #
 ##########
 ##########
 ##########
 
-SOLUTION:Y (5) 
+SOLUTION:Y (4) 
 (4,2)-SNK-U
-(3,2)-SNK-R
 (3,7)-MSE-D
 (4,7)-MSE-L
 (4,8)-SQR-L
 
-num_moves: 210
-num_visited_states: 39
+num_moves: 126
+num_visited_states: 24
 num_visited_hit_improve: 0
-num_visited_hit_drop: 159
-max_mem_state: 14
+num_visited_hit_drop: 96
+max_mem_state: 10
 ------------------------------
 levels/P4L03
 ##########
@@ -17134,11 +17124,11 @@ SOLUTION:Y (10)
 (1,4)-SQR-R
 (1,7)-SQR-D
 
-num_moves: 9084
-num_visited_states: 860
+num_moves: 9156
+num_visited_states: 875
 num_visited_hit_improve: 0
-num_visited_hit_drop: 7421
-max_mem_state: 152
+num_visited_hit_drop: 7478
+max_mem_state: 158
 ------------------------------
 levels/P4L15
 ##########
@@ -17280,7 +17270,7 @@ levels/P4L16
 ##########
 ##########
 ##b   a###
-###o m####
+###m o####
 #### #####
 #### d####
 ##########
@@ -17289,7 +17279,7 @@ levels/P4L16
 ##########
 ##########
 ##b   a###
-###o m####
+###m o####
 #### #####
 ####d ####
 ##########
@@ -17321,10 +17311,10 @@ SOLUTION:Y (5)
 (2,2)-SQR-R
 
 num_moves: 451
-num_visited_states: 45
+num_visited_states: 46
 num_visited_hit_improve: 0
-num_visited_hit_drop: 357
-max_mem_state: 16
+num_visited_hit_drop: 354
+max_mem_state: 15
 ------------------------------
 levels/P4L17
 ##########
@@ -17566,11 +17556,11 @@ SOLUTION:Y (9)
 (4,3)-SQR-R
 (4,7)-SQR-U
 
-num_moves: 8501
-num_visited_states: 679
+num_moves: 8197
+num_visited_states: 660
 num_visited_hit_improve: 0
-num_visited_hit_drop: 7396
-max_mem_state: 148
+num_visited_hit_drop: 7110
+max_mem_state: 143
 ------------------------------
 levels/P4L19
 ##########
@@ -17744,11 +17734,11 @@ SOLUTION:Y (16)
 (5,2)-PRC-U
 (5,1)-SQR-R
 
-num_moves: 25943
-num_visited_states: 1900
+num_moves: 26211
+num_visited_states: 1926
 num_visited_hit_improve: 0
-num_visited_hit_drop: 23080
-max_mem_state: 311
+num_visited_hit_drop: 23316
+max_mem_state: 317
 ------------------------------
 levels/P4L20
 ##########
@@ -18040,11 +18030,11 @@ SOLUTION:Y (16)
 (3,8)-SQR-D
 (5,8)-SQR-L
 
-num_moves: 118194
-num_visited_states: 7513
+num_moves: 117026
+num_visited_states: 7398
 num_visited_hit_improve: 0
-num_visited_hit_drop: 109500
-max_mem_state: 1137
+num_visited_hit_drop: 108464
+max_mem_state: 1117
 ------------------------------
 levels/P4L22
 ##########
@@ -18434,11 +18424,11 @@ SOLUTION:Y (10)
 (3,5)-SQR-U
 (1,5)-SQR-L
 
-num_moves: 33946
-num_visited_states: 3863
+num_moves: 34018
+num_visited_states: 3882
 num_visited_hit_improve: 0
-num_visited_hit_drop: 28227
-max_mem_state: 1422
+num_visited_hit_drop: 28290
+max_mem_state: 1434
 ------------------------------
 levels/P4L25
 ##########
@@ -18800,11 +18790,11 @@ SOLUTION:Y (18)
 (3,5)-SQR-L
 (3,3)-SQR-D
 
-num_moves: 47988
-num_visited_states: 3653
+num_moves: 48044
+num_visited_states: 3660
 num_visited_hit_improve: 0
-num_visited_hit_drop: 41695
-max_mem_state: 425
+num_visited_hit_drop: 41733
+max_mem_state: 427
 ------------------------------
 levels/P4L27
 ##########
@@ -18908,11 +18898,11 @@ SOLUTION:Y (9)
 (5,5)-SQR-L
 (5,2)-SQR-U
 
-num_moves: 14253
-num_visited_states: 1187
+num_moves: 13905
+num_visited_states: 1164
 num_visited_hit_improve: 0
-num_visited_hit_drop: 12271
-max_mem_state: 273
+num_visited_hit_drop: 11977
+max_mem_state: 253
 ------------------------------
 levels/P4L28
 ##########
@@ -19592,11 +19582,11 @@ SOLUTION:Y (26)
 (6,4)-PRC-U
 (6,2)-SQR-R
 
-num_moves: 337711
-num_visited_states: 17816
+num_moves: 337855
+num_visited_states: 17837
 num_visited_hit_improve: 0
-num_visited_hit_drop: 300050
-max_mem_state: 2032
+num_visited_hit_drop: 300165
+max_mem_state: 2047
 ------------------------------
 levels/P4L31
 ##########
@@ -20159,7 +20149,7 @@ SOLUTION:Y (13)
 num_moves: 24987
 num_visited_states: 2480
 num_visited_hit_improve: 0
-num_visited_hit_drop: 21453
+num_visited_hit_drop: 21454
 max_mem_state: 421
 ------------------------------
 levels/P4L34
@@ -20514,10 +20504,10 @@ SOLUTION:Y (34)
 (3,6)-SQR-D
 (5,6)-SQR-L
 
-num_moves: 660514
-num_visited_states: 35304
+num_moves: 660802
+num_visited_states: 35322
 num_visited_hit_improve: 0
-num_visited_hit_drop: 620711
+num_visited_hit_drop: 620981
 max_mem_state: 3084
 ------------------------------
 levels/P4L35
