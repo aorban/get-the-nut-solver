@@ -31,6 +31,18 @@ static inline int MY_intcmp(const void *aa, const void *bb) {
   return ( *(int*)aa - *(int*)bb );
 }
 
+TEST(ActionTest, PrintAction) {
+  Action a;
+  a.moving_new_animal = TILE("SQR");
+  a.static_new_animal = TILE("HOG");
+  a.won = 0;
+  a.lost = 1;
+  a.prio = 3;
+  a.exists = 1;
+  EXPECT_EQ("exists/won/lost/prio/movingNew/staticNew:1/0/1/3/b(SQR)/c(HOG)\n",
+            PrintAction(a));
+}
+
 TEST(ActionTest, Sortint) {
   static const int N = 200;
   srand(117);

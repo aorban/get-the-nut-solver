@@ -12,14 +12,14 @@ using namespace std;
 
 string PrintAction(const Action& a) {
   stringstream ss;
-  ss << "exists/won/lost/prio:"
+  ss << "exists/won/lost/prio/movingNew/staticNew:"
      << a.exists << "/"
      << a.won << "/"
      << a.lost << "/"
-     << a.prio
-     << "\nmoving: new: " << char('a' + a.moving_new_animal)
-     << "(" << CodeToTri(char('a' + a.moving_new_animal)) << ")"
-     << "\nstatic: new: " << char('a' + a.static_new_animal)
+     << a.prio << "/"
+     << char('a' + a.moving_new_animal)
+     << "(" << CodeToTri(char('a' + a.moving_new_animal)) << ")" << "/"
+     << char('a' + a.static_new_animal)
      << "(" << CodeToTri(char('a' + a.static_new_animal)) << ")" << endl;
   return ss.str();
 }
