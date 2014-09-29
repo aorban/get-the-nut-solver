@@ -16,26 +16,6 @@ using namespace std;
 
 static Rules REAL_RULES = Rules("rules-real.csv");
 
-std::string ReplaySolution(const Board& b, const State& start_state,
-                           const State::HistoryItem* history, int history_len) {
-  std::stringstream ss;
-  LOG(0) << b.DebugStringWithState(start_state) << endl;
-  State* states = new State[history_len + 1];
-  states[0] = start_state;
-  for (int i = 0; i < history_len; ++i) {
-    const Tile& moving_tile = states[i].GetTile(history[i].tile_index);
-    int pos = moving_tile.pos;
-    int type = moving_tile.type;
-    ss << "(" << pos / BOARD_X << "," << pos % BOARD_X << ")-"
-       << CodeToTri('a' + type) << "-"
-       << State::DIRNAME[history[i].dir] << "/";
-    states[i].Move(b, history[i].tile_index, history[i].dir, &states[i + 1]);
-    LOG(0) << b.DebugStringWithState(states[i + 1]) << endl;
-  }
-  delete states;
-  return ss.str();
-}
-
 void CheckSolution(const char* bs, const string& exp_sol) {
   Board b(bs, REAL_RULES);
   State s(bs);

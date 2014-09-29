@@ -71,6 +71,10 @@ struct SolveResult {
   int max_mem_state;
 };
 
+// Replays the solution and retuns a human readable string about it.
+std::string ReplaySolution(const Board& b, const State& start_state,
+                           const State::HistoryItem* history, int history_len);
+
 // Returns whether the puzzle can be solved.
 SolveResult solve(const Board& board, const State& start_state);
 
