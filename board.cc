@@ -202,6 +202,7 @@ void State::Initialize(const char *p) {
       }
       t[num_tiles].pos = i;
       t[num_tiles].type = type;
+      t[num_tiles].to_erase = 0;
       ++num_tiles;
     }
   }
