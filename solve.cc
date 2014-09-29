@@ -22,7 +22,7 @@ static const int MOVEABLE[] = {
   0,  // "ACN";
   1,  // "WLF";
   1,  // "BER";
-  0,  // "TRP";
+  0,  // "TPP";
   1,  // "ALG";
   0,  // "SWM";
   0,  // "MSS";

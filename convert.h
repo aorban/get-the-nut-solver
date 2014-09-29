@@ -11,7 +11,7 @@ static char TriToCode(const char *tri) {
   if (strncmp(tri, "ACN", 3) == 0) return 'e';
   if (strncmp(tri, "WLF", 3) == 0) return 'f';
   if (strncmp(tri, "BER", 3) == 0) return 'g';
-  if (strncmp(tri, "TRP", 3) == 0) return 'h';
+  if (strncmp(tri, "TPP", 3) == 0) return 'h';
   if (strncmp(tri, "ALG", 3) == 0) return 'i';
   if (strncmp(tri, "SWM", 3) == 0) return 'j';
   if (strncmp(tri, "MSS", 3) == 0) return 'k';  // Mouse in swamp
@@ -32,7 +32,7 @@ static inline const char *CodeToTri(const char c) {
     case 'e': return "ACN";
     case 'f': return "WLF";
     case 'g': return "BER";
-    case 'h': return "TRP";
+    case 'h': return "TPP";
     case 'i': return "ALG";
     case 'j': return "SWM";
     case 'k': return "MSS";
