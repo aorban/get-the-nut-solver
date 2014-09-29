@@ -1,7 +1,7 @@
 #ifndef GTN_LOG_H_
 #define GTN_LOG_H_
 
-#define DEBUG -1
+#define DEBUG -2
 
 class Voidify {
  public:
