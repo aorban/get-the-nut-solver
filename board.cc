@@ -80,6 +80,36 @@ std::string Board::DebugString(const State *state) const {
   return s;
 }
 
+std::string Board::DebugStringNice(const State &state) const {
+  std::stringstream res;
+  int pos = 0;
+  for (int y = 0; y < BOARD_Y; ++y) {
+    std::stringstream ss[4];
+    for (int x = 0; x < BOARD_X; ++x, ++pos) {
+      ss[0] << "|-----";
+      ss[1] << "|     ";
+      ss[3] << "|     ";
+      char c = b[pos];
+      int index = state.Find(pos);
+      if (index != -1) {
+        c = 'a' + state.t[index].type;
+        ss[2] << "| " << CodeToTri(c) << " ";
+      } else if (c == BLANK) {
+        ss[2] << "|     ";
+      } else {
+        ss[2] << "| ### ";
+      }
+    }
+    ss[0] << "|\n";
+    ss[1] << "|\n";
+    ss[2] << "|\n";
+    ss[3] << "|\n";
+    res << ss[0].str() << ss[1].str() << ss[2].str() << ss[3].str();
+  }
+  res << string(BOARD_X * 6 + 1, '-') << "\n";
+  return res.str();
+}
+
 // void Board::FloodFrom(int tile, int pos, int nodir) {
 //   int value = dist[tile][pos][nodir];
 //   //printf("pos: %d\n", pos);
