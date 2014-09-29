@@ -23,7 +23,6 @@ class MockRules : public Rules {
       a.static_new_animal = a2;
       a.won = 0;
       a.lost = 0;
-      a.continues = 0;
       a.prio = 3;
       a.exists = 1;
       for (int r = 0; r < NUM_RELATIONS; ++r) {
@@ -39,7 +38,6 @@ class MockRules : public Rules {
       a.static_new_animal = a2;
       a.won = 0;
       a.lost = 0;
-      a.continues = 0;
       a.prio = 1;
       a.exists = 1;
       for (int r = 0; r < NUM_RELATIONS; ++r) {
@@ -55,7 +53,6 @@ class MockRules : public Rules {
       a.static_new_animal = a2;
       a.won = 0;
       a.lost = 0;
-      a.continues = 0;
       a.prio = 2;
       a.exists = 1;
       for (int r = 0; r < NUM_RELATIONS; ++r) {
@@ -71,7 +68,6 @@ class MockRules : public Rules {
       a.static_new_animal = TILE("---");
       a.won = 0;
       a.lost = 0;
-      a.continues = 0;
       a.prio = 2;
       a.exists = 1;
       rules[a1][a2][ON] = a;
@@ -85,7 +81,6 @@ class MockRules : public Rules {
       a.static_new_animal = TILE("---");
       a.won = 0;
       a.lost = 0;
-      a.continues = 0;
       a.prio = 2;
       a.exists = 1;
       rules[a1][a2][ON] = a;
@@ -99,7 +94,6 @@ class MockRules : public Rules {
       a.static_new_animal = TILE("---");
       a.won = 0;
       a.lost = 0;
-      a.continues = 0;
       a.prio = 0;
       a.exists = 1;
       for (int r = 0; r < NUM_RELATIONS; ++r) {

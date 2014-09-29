@@ -12,11 +12,10 @@ using namespace std;
 
 string PrintAction(const Action& a) {
   stringstream ss;
-  ss << "exists/won/lost/cont/prio:"
+  ss << "exists/won/lost/prio:"
      << a.exists << "/"
      << a.won << "/"
      << a.lost << "/"
-     << a.continues << "/"
      << a.prio
      << "\nmoving: new: " << char('a' + a.moving_new_animal)
      << "(" << CodeToTri(char('a' + a.moving_new_animal)) << ")"
@@ -29,7 +28,6 @@ void Rules::Initialize() {
   Action action;
   action.won = 0;
   action.lost = 0;
-  action.continues = 0;
   action.prio = 3;
   action.exists = 1;
 

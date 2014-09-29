@@ -67,7 +67,6 @@ TEST(RulesTest, Default) {
     EXPECT_EQ(TILE("HOG"), a.static_new_animal);
     EXPECT_FALSE(a.won);
     EXPECT_FALSE(a.lost);
-    EXPECT_FALSE(a.continues);
     EXPECT_EQ(3, a.prio);
   }
   {
@@ -83,7 +82,6 @@ TEST(RulesTest, Default) {
     EXPECT_EQ(TILE("HOG"), a.static_new_animal);
     EXPECT_FALSE(a.won);
     EXPECT_FALSE(a.lost);
-    EXPECT_FALSE(a.continues);
     EXPECT_EQ(3, a.prio);
   }
 }
