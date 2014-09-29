@@ -13,7 +13,7 @@ HOS - 'l'  // Hog in swamp
 SNK - 'm'
 PRC - 'n'
 FSN - 'o'  // Full snake
-
+------------------------------
 levels/P1L01
 ##########
 ##      a#
@@ -71,7 +71,7 @@ num_visited_states: 10
 num_visited_hit_improve: 0
 num_visited_hit_drop: 44
 max_mem_state: 4
-
+------------------------------
 levels/P1L02
 ##########
 ##########
@@ -129,7 +129,7 @@ num_visited_states: 9
 num_visited_hit_improve: 0
 num_visited_hit_drop: 47
 max_mem_state: 4
-
+------------------------------
 levels/P1L03
 ##########
 ##########
@@ -207,7 +207,7 @@ num_visited_states: 46
 num_visited_hit_improve: 0
 num_visited_hit_drop: 302
 max_mem_state: 17
-
+------------------------------
 levels/P1L04
 ##########
 ##########
@@ -295,7 +295,7 @@ num_visited_states: 66
 num_visited_hit_improve: 0
 num_visited_hit_drop: 361
 max_mem_state: 18
-
+------------------------------
 levels/P1L05
 ##########
 ##########
@@ -373,7 +373,7 @@ num_visited_states: 9
 num_visited_hit_improve: 0
 num_visited_hit_drop: 55
 max_mem_state: 3
-
+------------------------------
 levels/P1L06
 ##########
 ##########
@@ -441,7 +441,7 @@ num_visited_states: 6
 num_visited_hit_improve: 0
 num_visited_hit_drop: 25
 max_mem_state: 2
-
+------------------------------
 levels/P1L07
 ##########
 ##########
@@ -499,7 +499,7 @@ num_visited_states: 37
 num_visited_hit_improve: 0
 num_visited_hit_drop: 148
 max_mem_state: 17
-
+------------------------------
 levels/P1L08
 ##########
 ### #  c #
@@ -667,7 +667,7 @@ num_visited_states: 515
 num_visited_hit_improve: 0
 num_visited_hit_drop: 4495
 max_mem_state: 70
-
+------------------------------
 levels/P1L09
 ##########
 ###   b###
@@ -755,7 +755,7 @@ num_visited_states: 51
 num_visited_hit_improve: 0
 num_visited_hit_drop: 175
 max_mem_state: 24
-
+------------------------------
 levels/P1L10
 ##########
 ##bd   d##
@@ -833,7 +833,7 @@ num_visited_states: 46
 num_visited_hit_improve: 0
 num_visited_hit_drop: 387
 max_mem_state: 11
-
+------------------------------
 levels/P1L11
 ##########
 ###a   d##
@@ -941,7 +941,7 @@ num_visited_states: 62
 num_visited_hit_improve: 0
 num_visited_hit_drop: 314
 max_mem_state: 18
-
+------------------------------
 levels/P1L12
 ##########
 #####b####
@@ -1039,7 +1039,7 @@ num_visited_states: 178
 num_visited_hit_improve: 0
 num_visited_hit_drop: 1125
 max_mem_state: 48
-
+------------------------------
 levels/P1L13
 ##########
 ##########
@@ -1117,7 +1117,7 @@ num_visited_states: 63
 num_visited_hit_improve: 0
 num_visited_hit_drop: 384
 max_mem_state: 22
-
+------------------------------
 levels/P1L14
 ##########
 #        #
@@ -1215,7 +1215,7 @@ num_visited_states: 54
 num_visited_hit_improve: 0
 num_visited_hit_drop: 291
 max_mem_state: 14
-
+------------------------------
 levels/P1L15
 ##########
 ###### ###
@@ -1333,7 +1333,7 @@ num_visited_states: 168
 num_visited_hit_improve: 0
 num_visited_hit_drop: 1606
 max_mem_state: 42
-
+------------------------------
 levels/P1L16
 ##########
 ### b#####
@@ -1431,7 +1431,7 @@ num_visited_states: 117
 num_visited_hit_improve: 0
 num_visited_hit_drop: 838
 max_mem_state: 29
-
+------------------------------
 levels/P1L17
 ##########
 ##b c#####
@@ -1529,7 +1529,7 @@ num_visited_states: 51
 num_visited_hit_improve: 0
 num_visited_hit_drop: 418
 max_mem_state: 15
-
+------------------------------
 levels/P1L18
 ##########
 ##  c   ##
@@ -1647,7 +1647,7 @@ num_visited_states: 432
 num_visited_hit_improve: 0
 num_visited_hit_drop: 4007
 max_mem_state: 97
-
+------------------------------
 levels/P1L19
 ##########
 #d     b##
@@ -1785,7 +1785,7 @@ num_visited_states: 1815
 num_visited_hit_improve: 0
 num_visited_hit_drop: 16547
 max_mem_state: 373
-
+------------------------------
 levels/P1L20
 ##########
 ### b   ##
@@ -1983,7 +1983,7 @@ num_visited_states: 5152
 num_visited_hit_improve: 0
 num_visited_hit_drop: 77631
 max_mem_state: 578
-
+------------------------------
 levels/P1L21
 ##########
 ##  d b ##
@@ -2101,7 +2101,7 @@ num_visited_states: 235
 num_visited_hit_improve: 0
 num_visited_hit_drop: 1541
 max_mem_state: 49
-
+------------------------------
 levels/P1L22
 ##########
 #b d######
@@ -2229,7 +2229,7 @@ num_visited_states: 9259
 num_visited_hit_improve: 0
 num_visited_hit_drop: 90182
 max_mem_state: 1890
-
+------------------------------
 levels/P1L23
 ##########
 #c     d##
@@ -2397,7 +2397,7 @@ num_visited_states: 14554
 num_visited_hit_improve: 0
 num_visited_hit_drop: 165826
 max_mem_state: 1905
-
+------------------------------
 levels/P1L24
 ##########
 #   d a###
@@ -2655,7 +2655,7 @@ num_visited_states: 1330
 num_visited_hit_improve: 0
 num_visited_hit_drop: 15228
 max_mem_state: 113
-
+------------------------------
 levels/P1L25
 ##########
 ###  ### #
@@ -2933,7 +2933,7 @@ num_visited_states: 7118
 num_visited_hit_improve: 0
 num_visited_hit_drop: 72681
 max_mem_state: 1337
-
+------------------------------
 levels/P1L26
 ##########
 #b  #  d##
@@ -3201,7 +3201,7 @@ num_visited_states: 28630
 num_visited_hit_improve: 0
 num_visited_hit_drop: 381052
 max_mem_state: 3896
-
+------------------------------
 levels/P1L27
 ##########
 ##    # ##
@@ -3429,7 +3429,7 @@ num_visited_states: 11329
 num_visited_hit_improve: 0
 num_visited_hit_drop: 199616
 max_mem_state: 1683
-
+------------------------------
 levels/P1L28
 ##########
 ###d  ####
@@ -3527,7 +3527,7 @@ num_visited_states: 271
 num_visited_hit_improve: 0
 num_visited_hit_drop: 2175
 max_mem_state: 68
-
+------------------------------
 levels/P1L29
 ##########
 ##d  #####
@@ -3655,7 +3655,7 @@ num_visited_states: 832
 num_visited_hit_improve: 0
 num_visited_hit_drop: 8178
 max_mem_state: 134
-
+------------------------------
 levels/P1L30
 ##########
 #a #######
@@ -3783,7 +3783,7 @@ num_visited_states: 165
 num_visited_hit_improve: 0
 num_visited_hit_drop: 1212
 max_mem_state: 31
-
+------------------------------
 levels/P1L31
 ##########
 ###    ###
@@ -3911,7 +3911,7 @@ num_visited_states: 5275
 num_visited_hit_improve: 0
 num_visited_hit_drop: 54759
 max_mem_state: 1540
-
+------------------------------
 levels/P1L32
 ##########
 ####c#####
@@ -4139,7 +4139,7 @@ num_visited_states: 600
 num_visited_hit_improve: 0
 num_visited_hit_drop: 5942
 max_mem_state: 172
-
+------------------------------
 levels/P1L33
 ##########
 ##d#   a##
@@ -4287,7 +4287,7 @@ num_visited_states: 2683
 num_visited_hit_improve: 0
 num_visited_hit_drop: 27032
 max_mem_state: 496
-
+------------------------------
 levels/P1L34
 ##########
 #b     d##
@@ -4485,7 +4485,7 @@ num_visited_states: 45046
 num_visited_hit_improve: 0
 num_visited_hit_drop: 696357
 max_mem_state: 6515
-
+------------------------------
 levels/P1L35
 ##########
 ### ######
@@ -4603,7 +4603,7 @@ num_visited_states: 836
 num_visited_hit_improve: 0
 num_visited_hit_drop: 6842
 max_mem_state: 146
-
+------------------------------
 levels/P1L36
 ##########
 ##b#d# ###
@@ -4851,7 +4851,7 @@ num_visited_states: 4084
 num_visited_hit_improve: 0
 num_visited_hit_drop: 55725
 max_mem_state: 409
-
+------------------------------
 levels/P2L01
 ##########
 ####a#####
@@ -4909,7 +4909,7 @@ num_visited_states: 5
 num_visited_hit_improve: 0
 num_visited_hit_drop: 48
 max_mem_state: 2
-
+------------------------------
 levels/P2L02
 ##########
 ##########
@@ -4967,7 +4967,7 @@ num_visited_states: 13
 num_visited_hit_improve: 0
 num_visited_hit_drop: 53
 max_mem_state: 7
-
+------------------------------
 levels/P2L03
 ##########
 ##########
@@ -5065,7 +5065,7 @@ num_visited_states: 139
 num_visited_hit_improve: 0
 num_visited_hit_drop: 981
 max_mem_state: 30
-
+------------------------------
 levels/P2L04
 ##########
 ###a######
@@ -5163,7 +5163,7 @@ num_visited_states: 19
 num_visited_hit_improve: 0
 num_visited_hit_drop: 129
 max_mem_state: 4
-
+------------------------------
 levels/P2L05
 ##########
 ####f#   #
@@ -5261,7 +5261,7 @@ num_visited_states: 20
 num_visited_hit_improve: 0
 num_visited_hit_drop: 107
 max_mem_state: 7
-
+------------------------------
 levels/P2L06
 ##########
 ##########
@@ -5369,7 +5369,7 @@ num_visited_states: 19
 num_visited_hit_improve: 0
 num_visited_hit_drop: 179
 max_mem_state: 4
-
+------------------------------
 levels/P2L07
 ##########
 ##########
@@ -5477,7 +5477,7 @@ num_visited_states: 169
 num_visited_hit_improve: 0
 num_visited_hit_drop: 1634
 max_mem_state: 42
-
+------------------------------
 levels/P2L08
 ##########
 # #     ##
@@ -5635,7 +5635,7 @@ num_visited_states: 44
 num_visited_hit_improve: 0
 num_visited_hit_drop: 259
 max_mem_state: 6
-
+------------------------------
 levels/P2L09
 ##########
 ##########
@@ -5733,7 +5733,7 @@ num_visited_states: 42
 num_visited_hit_improve: 0
 num_visited_hit_drop: 186
 max_mem_state: 11
-
+------------------------------
 levels/P2L10
 ##########
 ##########
@@ -5821,7 +5821,7 @@ num_visited_states: 21
 num_visited_hit_improve: 0
 num_visited_hit_drop: 104
 max_mem_state: 7
-
+------------------------------
 levels/P2L11
 ##########
 ##########
@@ -5929,7 +5929,7 @@ num_visited_states: 227
 num_visited_hit_improve: 0
 num_visited_hit_drop: 1857
 max_mem_state: 53
-
+------------------------------
 levels/P2L12
 ##########
 #h########
@@ -6057,7 +6057,7 @@ num_visited_states: 391
 num_visited_hit_improve: 0
 num_visited_hit_drop: 2535
 max_mem_state: 129
-
+------------------------------
 levels/P2L13
 ##########
 ###a##b###
@@ -6165,7 +6165,7 @@ num_visited_states: 183
 num_visited_hit_improve: 0
 num_visited_hit_drop: 1581
 max_mem_state: 50
-
+------------------------------
 levels/P2L14
 ##########
 ######h###
@@ -6293,7 +6293,7 @@ num_visited_states: 103
 num_visited_hit_improve: 0
 num_visited_hit_drop: 685
 max_mem_state: 21
-
+------------------------------
 levels/P2L15
 ##########
 ###g######
@@ -6461,7 +6461,7 @@ num_visited_states: 176
 num_visited_hit_improve: 0
 num_visited_hit_drop: 1136
 max_mem_state: 24
-
+------------------------------
 levels/P2L16
 ##########
 ##a c b###
@@ -6549,7 +6549,7 @@ num_visited_states: 45
 num_visited_hit_improve: 0
 num_visited_hit_drop: 380
 max_mem_state: 13
-
+------------------------------
 levels/P2L17
 ##########
 ##########
@@ -6667,7 +6667,7 @@ num_visited_states: 85
 num_visited_hit_improve: 0
 num_visited_hit_drop: 714
 max_mem_state: 15
-
+------------------------------
 levels/P2L18
 ##########
 ##  ######
@@ -6775,7 +6775,7 @@ num_visited_states: 138
 num_visited_hit_improve: 0
 num_visited_hit_drop: 676
 max_mem_state: 43
-
+------------------------------
 levels/P2L19
 ##########
 ##########
@@ -6873,7 +6873,7 @@ num_visited_states: 109
 num_visited_hit_improve: 0
 num_visited_hit_drop: 826
 max_mem_state: 28
-
+------------------------------
 levels/P2L20
 ##########
 ###   ####
@@ -7021,7 +7021,7 @@ num_visited_states: 946
 num_visited_hit_improve: 0
 num_visited_hit_drop: 8285
 max_mem_state: 165
-
+------------------------------
 levels/P2L21
 ##########
 ## ## ####
@@ -7199,7 +7199,7 @@ num_visited_states: 1546
 num_visited_hit_improve: 0
 num_visited_hit_drop: 18933
 max_mem_state: 241
-
+------------------------------
 levels/P2L22
 ##########
 #       a#
@@ -7347,7 +7347,7 @@ num_visited_states: 1090
 num_visited_hit_improve: 0
 num_visited_hit_drop: 9293
 max_mem_state: 207
-
+------------------------------
 levels/P2L23
 ##########
 ##### e###
@@ -7575,7 +7575,7 @@ num_visited_states: 131
 num_visited_hit_improve: 0
 num_visited_hit_drop: 987
 max_mem_state: 12
-
+------------------------------
 levels/P2L24
 ##########
 #      b##
@@ -7693,7 +7693,7 @@ num_visited_states: 83
 num_visited_hit_improve: 0
 num_visited_hit_drop: 688
 max_mem_state: 15
-
+------------------------------
 levels/P2L25
 ##########
 ####a #d##
@@ -7861,7 +7861,7 @@ num_visited_states: 1732
 num_visited_hit_improve: 0
 num_visited_hit_drop: 24659
 max_mem_state: 248
-
+------------------------------
 levels/P2L26
 ##########
 ##    d  #
@@ -8069,7 +8069,7 @@ num_visited_states: 22371
 num_visited_hit_improve: 0
 num_visited_hit_drop: 279015
 max_mem_state: 2904
-
+------------------------------
 levels/P2L27
 ##########
 #  b######
@@ -8187,7 +8187,7 @@ num_visited_states: 153
 num_visited_hit_improve: 0
 num_visited_hit_drop: 946
 max_mem_state: 37
-
+------------------------------
 levels/P2L28
 ##########
 ##   #####
@@ -8345,7 +8345,7 @@ num_visited_states: 818
 num_visited_hit_improve: 0
 num_visited_hit_drop: 9688
 max_mem_state: 160
-
+------------------------------
 levels/P2L29
 ##########
 ##### ####
@@ -8523,7 +8523,7 @@ num_visited_states: 339
 num_visited_hit_improve: 0
 num_visited_hit_drop: 3810
 max_mem_state: 38
-
+------------------------------
 levels/P2L30
 ##########
 ##########
@@ -8711,7 +8711,7 @@ num_visited_states: 318
 num_visited_hit_improve: 0
 num_visited_hit_drop: 2632
 max_mem_state: 47
-
+------------------------------
 levels/P2L31
 ##########
 #a  c#####
@@ -8929,7 +8929,7 @@ num_visited_states: 266
 num_visited_hit_improve: 0
 num_visited_hit_drop: 2438
 max_mem_state: 26
-
+------------------------------
 levels/P2L32
 ##########
 ##a### f##
@@ -9107,7 +9107,7 @@ num_visited_states: 969
 num_visited_hit_improve: 0
 num_visited_hit_drop: 9882
 max_mem_state: 112
-
+------------------------------
 levels/P2L33
 ##########
 #a# h## c#
@@ -9245,7 +9245,7 @@ num_visited_states: 1463
 num_visited_hit_improve: 0
 num_visited_hit_drop: 10298
 max_mem_state: 302
-
+------------------------------
 levels/P2L34
 ##########
 ##b g d###
@@ -9433,7 +9433,7 @@ num_visited_states: 7336
 num_visited_hit_improve: 0
 num_visited_hit_drop: 99502
 max_mem_state: 1366
-
+------------------------------
 levels/P2L35
 ##########
 #   # d  #
@@ -9681,7 +9681,7 @@ num_visited_states: 693
 num_visited_hit_improve: 0
 num_visited_hit_drop: 6548
 max_mem_state: 91
-
+------------------------------
 levels/P2L36
 ##########
 #a##  # ##
@@ -9899,7 +9899,7 @@ num_visited_states: 14365
 num_visited_hit_improve: 0
 num_visited_hit_drop: 205896
 max_mem_state: 1643
-
+------------------------------
 levels/P3L01
 ##########
 ##     ###
@@ -9967,7 +9967,7 @@ num_visited_states: 56
 num_visited_hit_improve: 0
 num_visited_hit_drop: 218
 max_mem_state: 23
-
+------------------------------
 levels/P3L02
 ##########
 ##########
@@ -10055,7 +10055,7 @@ num_visited_states: 15
 num_visited_hit_improve: 0
 num_visited_hit_drop: 61
 max_mem_state: 4
-
+------------------------------
 levels/P3L03
 ##########
 ##b j#####
@@ -10163,7 +10163,7 @@ num_visited_states: 85
 num_visited_hit_improve: 0
 num_visited_hit_drop: 640
 max_mem_state: 19
-
+------------------------------
 levels/P3L04
 ##########
 ##########
@@ -10281,7 +10281,7 @@ num_visited_states: 34
 num_visited_hit_improve: 0
 num_visited_hit_drop: 193
 max_mem_state: 6
-
+------------------------------
 levels/P3L05
 ##########
 ###  #####
@@ -10399,7 +10399,7 @@ num_visited_states: 263
 num_visited_hit_improve: 0
 num_visited_hit_drop: 1967
 max_mem_state: 55
-
+------------------------------
 levels/P3L06
 ##########
 ##########
@@ -10447,7 +10447,7 @@ num_visited_states: 2
 num_visited_hit_improve: 0
 num_visited_hit_drop: 12
 max_mem_state: 1
-
+------------------------------
 levels/P3L07
 ##########
 ##########
@@ -10525,7 +10525,7 @@ num_visited_states: 24
 num_visited_hit_improve: 0
 num_visited_hit_drop: 136
 max_mem_state: 8
-
+------------------------------
 levels/P3L08
 ##########
 #######d #
@@ -10643,7 +10643,7 @@ num_visited_states: 151
 num_visited_hit_improve: 0
 num_visited_hit_drop: 844
 max_mem_state: 28
-
+------------------------------
 levels/P3L09
 ##########
 #b######d#
@@ -10781,7 +10781,7 @@ num_visited_states: 987
 num_visited_hit_improve: 0
 num_visited_hit_drop: 11208
 max_mem_state: 177
-
+------------------------------
 levels/P3L10
 ##########
 ### ######
@@ -10939,7 +10939,7 @@ num_visited_states: 26
 num_visited_hit_improve: 0
 num_visited_hit_drop: 153
 max_mem_state: 7
-
+------------------------------
 levels/P3L11
 ##########
 ##d    j##
@@ -11057,7 +11057,7 @@ num_visited_states: 19
 num_visited_hit_improve: 0
 num_visited_hit_drop: 123
 max_mem_state: 5
-
+------------------------------
 levels/P3L12
 ##########
 #b#j###a##
@@ -11205,7 +11205,7 @@ num_visited_states: 274
 num_visited_hit_improve: 0
 num_visited_hit_drop: 2394
 max_mem_state: 40
-
+------------------------------
 levels/P3L13
 ##########
 ###  a####
@@ -11343,7 +11343,7 @@ num_visited_states: 234
 num_visited_hit_improve: 0
 num_visited_hit_drop: 1448
 max_mem_state: 65
-
+------------------------------
 levels/P3L14
 ##########
 ##########
@@ -11461,7 +11461,7 @@ num_visited_states: 80
 num_visited_hit_improve: 0
 num_visited_hit_drop: 320
 max_mem_state: 27
-
+------------------------------
 levels/P3L15
 ##########
 #j   ddbd#
@@ -11599,7 +11599,7 @@ num_visited_states: 27
 num_visited_hit_improve: 0
 num_visited_hit_drop: 188
 max_mem_state: 5
-
+------------------------------
 levels/P3L16
 ##########
 ##########
@@ -11687,7 +11687,7 @@ num_visited_states: 42
 num_visited_hit_improve: 0
 num_visited_hit_drop: 277
 max_mem_state: 15
-
+------------------------------
 levels/P3L17
 ##########
 ##i  j   #
@@ -11805,7 +11805,7 @@ num_visited_states: 249
 num_visited_hit_improve: 0
 num_visited_hit_drop: 1755
 max_mem_state: 42
-
+------------------------------
 levels/P3L18
 ##########
 ####### ##
@@ -11923,7 +11923,7 @@ num_visited_states: 175
 num_visited_hit_improve: 0
 num_visited_hit_drop: 1282
 max_mem_state: 29
-
+------------------------------
 levels/P3L19
 ##########
 ###a d ###
@@ -12071,7 +12071,7 @@ num_visited_states: 118
 num_visited_hit_improve: 0
 num_visited_hit_drop: 632
 max_mem_state: 23
-
+------------------------------
 levels/P3L20
 ##########
 #a #d### #
@@ -12299,7 +12299,7 @@ num_visited_states: 146
 num_visited_hit_improve: 0
 num_visited_hit_drop: 1208
 max_mem_state: 18
-
+------------------------------
 levels/P3L21
 ##########
 # #####ai#
@@ -12507,7 +12507,7 @@ num_visited_states: 820
 num_visited_hit_improve: 0
 num_visited_hit_drop: 9844
 max_mem_state: 78
-
+------------------------------
 levels/P3L22
 ##########
 ##########
@@ -12695,7 +12695,7 @@ num_visited_states: 229
 num_visited_hit_improve: 0
 num_visited_hit_drop: 1797
 max_mem_state: 40
-
+------------------------------
 levels/P3L23
 ##########
 # ###  d##
@@ -12963,7 +12963,7 @@ num_visited_states: 1635
 num_visited_hit_improve: 0
 num_visited_hit_drop: 16077
 max_mem_state: 130
-
+------------------------------
 levels/P3L24
 ##########
 ##b#  i###
@@ -13131,7 +13131,7 @@ num_visited_states: 472
 num_visited_hit_improve: 0
 num_visited_hit_drop: 4629
 max_mem_state: 60
-
+------------------------------
 levels/P3L25
 ##########
 ##########
@@ -13359,7 +13359,7 @@ num_visited_states: 1012
 num_visited_hit_improve: 0
 num_visited_hit_drop: 11662
 max_mem_state: 117
-
+------------------------------
 levels/P3L26
 ##########
 #######c##
@@ -13497,7 +13497,7 @@ num_visited_states: 744
 num_visited_hit_improve: 0
 num_visited_hit_drop: 8479
 max_mem_state: 165
-
+------------------------------
 levels/P3L27
 ##########
 #######d##
@@ -13625,7 +13625,7 @@ num_visited_states: 280
 num_visited_hit_improve: 0
 num_visited_hit_drop: 2614
 max_mem_state: 66
-
+------------------------------
 levels/P3L28
 ##########
 ##########
@@ -13833,7 +13833,7 @@ num_visited_states: 1858
 num_visited_hit_improve: 0
 num_visited_hit_drop: 20804
 max_mem_state: 259
-
+------------------------------
 levels/P3L29
 ##########
 ####### ##
@@ -14051,7 +14051,7 @@ num_visited_states: 1478
 num_visited_hit_improve: 0
 num_visited_hit_drop: 18348
 max_mem_state: 174
-
+------------------------------
 levels/P3L30
 ##########
 #### d#  #
@@ -14209,7 +14209,7 @@ num_visited_states: 14888
 num_visited_hit_improve: 0
 num_visited_hit_drop: 136740
 max_mem_state: 3495
-
+------------------------------
 levels/P3L31
 ##########
 #a#####  #
@@ -14437,7 +14437,7 @@ num_visited_states: 27680
 num_visited_hit_improve: 0
 num_visited_hit_drop: 370497
 max_mem_state: 4409
-
+------------------------------
 levels/P3L32
 ##########
 #  ####a #
@@ -14635,7 +14635,7 @@ num_visited_states: 7155
 num_visited_hit_improve: 0
 num_visited_hit_drop: 83025
 max_mem_state: 1417
-
+------------------------------
 levels/P3L33
 ##########
 #b i    i#
@@ -14833,7 +14833,7 @@ num_visited_states: 3157
 num_visited_hit_improve: 0
 num_visited_hit_drop: 37843
 max_mem_state: 413
-
+------------------------------
 levels/P3L34
 ##########
 #a#d  j ##
@@ -15161,7 +15161,7 @@ num_visited_states: 1629
 num_visited_hit_improve: 0
 num_visited_hit_drop: 19225
 max_mem_state: 158
-
+------------------------------
 levels/P3L35
 ##########
 ###c# ####
@@ -15459,7 +15459,7 @@ num_visited_states: 16125
 num_visited_hit_improve: 0
 num_visited_hit_drop: 259022
 max_mem_state: 1277
-
+------------------------------
 levels/P3L36
 ##########
 #a d#c  ##
@@ -15817,7 +15817,7 @@ num_visited_states: 2469
 num_visited_hit_improve: 0
 num_visited_hit_drop: 23782
 max_mem_state: 153
-
+------------------------------
 levels/P4L01
 ##########
 #### #####
@@ -15875,7 +15875,7 @@ num_visited_states: 3
 num_visited_hit_improve: 0
 num_visited_hit_drop: 21
 max_mem_state: 1
-
+------------------------------
 levels/P4L02
 ##########
 ##########
@@ -15943,7 +15943,7 @@ num_visited_states: 39
 num_visited_hit_improve: 0
 num_visited_hit_drop: 159
 max_mem_state: 14
-
+------------------------------
 levels/P4L03
 ##########
 ##########
@@ -16051,7 +16051,7 @@ num_visited_states: 44
 num_visited_hit_improve: 0
 num_visited_hit_drop: 437
 max_mem_state: 10
-
+------------------------------
 levels/P4L04
 ##########
 ##### c###
@@ -16179,7 +16179,7 @@ num_visited_states: 72
 num_visited_hit_improve: 0
 num_visited_hit_drop: 599
 max_mem_state: 15
-
+------------------------------
 levels/P4L05
 ##########
 ###b######
@@ -16277,7 +16277,7 @@ num_visited_states: 171
 num_visited_hit_improve: 0
 num_visited_hit_drop: 1467
 max_mem_state: 31
-
+------------------------------
 levels/P4L06
 ##########
 #####  a##
@@ -16355,7 +16355,7 @@ num_visited_states: 51
 num_visited_hit_improve: 0
 num_visited_hit_drop: 376
 max_mem_state: 13
-
+------------------------------
 levels/P4L07
 ##########
 ##########
@@ -16443,7 +16443,7 @@ num_visited_states: 73
 num_visited_hit_improve: 0
 num_visited_hit_drop: 596
 max_mem_state: 17
-
+------------------------------
 levels/P4L08
 ##########
 ##########
@@ -16541,7 +16541,7 @@ num_visited_states: 94
 num_visited_hit_improve: 0
 num_visited_hit_drop: 551
 max_mem_state: 22
-
+------------------------------
 levels/P4L09
 ##########
 ##########
@@ -16629,7 +16629,7 @@ num_visited_states: 129
 num_visited_hit_improve: 0
 num_visited_hit_drop: 821
 max_mem_state: 44
-
+------------------------------
 levels/P4L10
 ##########
 ##########
@@ -16717,7 +16717,7 @@ num_visited_states: 24
 num_visited_hit_improve: 0
 num_visited_hit_drop: 249
 max_mem_state: 7
-
+------------------------------
 levels/P4L11
 ##########
 ##########
@@ -16805,7 +16805,7 @@ num_visited_states: 79
 num_visited_hit_improve: 0
 num_visited_hit_drop: 813
 max_mem_state: 26
-
+------------------------------
 levels/P4L12
 ##########
 ##########
@@ -16903,7 +16903,7 @@ num_visited_states: 309
 num_visited_hit_improve: 0
 num_visited_hit_drop: 3022
 max_mem_state: 91
-
+------------------------------
 levels/P4L13
 ##########
 ####a#####
@@ -17021,7 +17021,7 @@ num_visited_states: 176
 num_visited_hit_improve: 0
 num_visited_hit_drop: 974
 max_mem_state: 63
-
+------------------------------
 levels/P4L14
 ##########
 ####     #
@@ -17139,7 +17139,7 @@ num_visited_states: 860
 num_visited_hit_improve: 0
 num_visited_hit_drop: 7421
 max_mem_state: 152
-
+------------------------------
 levels/P4L15
 ##########
 ###a######
@@ -17257,7 +17257,7 @@ num_visited_states: 60
 num_visited_hit_improve: 0
 num_visited_hit_drop: 247
 max_mem_state: 20
-
+------------------------------
 levels/P4L16
 ##########
 ##########
@@ -17325,7 +17325,7 @@ num_visited_states: 45
 num_visited_hit_improve: 0
 num_visited_hit_drop: 357
 max_mem_state: 16
-
+------------------------------
 levels/P4L17
 ##########
 #n  ######
@@ -17463,7 +17463,7 @@ num_visited_states: 3413
 num_visited_hit_improve: 0
 num_visited_hit_drop: 28266
 max_mem_state: 1051
-
+------------------------------
 levels/P4L18
 ##########
 ##########
@@ -17571,7 +17571,7 @@ num_visited_states: 679
 num_visited_hit_improve: 0
 num_visited_hit_drop: 7396
 max_mem_state: 148
-
+------------------------------
 levels/P4L19
 ##########
 #####   n#
@@ -17749,7 +17749,7 @@ num_visited_states: 1900
 num_visited_hit_improve: 0
 num_visited_hit_drop: 23080
 max_mem_state: 311
-
+------------------------------
 levels/P4L20
 ##########
 ###  #d#m#
@@ -17867,7 +17867,7 @@ num_visited_states: 28
 num_visited_hit_improve: 0
 num_visited_hit_drop: 220
 max_mem_state: 6
-
+------------------------------
 levels/P4L21
 ##########
 #d#### ###
@@ -18045,7 +18045,7 @@ num_visited_states: 7513
 num_visited_hit_improve: 0
 num_visited_hit_drop: 109500
 max_mem_state: 1137
-
+------------------------------
 levels/P4L22
 ##########
 ##########
@@ -18163,7 +18163,7 @@ num_visited_states: 158
 num_visited_hit_improve: 0
 num_visited_hit_drop: 1594
 max_mem_state: 30
-
+------------------------------
 levels/P4L23
 ##########
 ###a######
@@ -18321,7 +18321,7 @@ num_visited_states: 4687
 num_visited_hit_improve: 0
 num_visited_hit_drop: 61302
 max_mem_state: 796
-
+------------------------------
 levels/P4L24
 ##########
 ##a  d## #
@@ -18439,7 +18439,7 @@ num_visited_states: 3863
 num_visited_hit_improve: 0
 num_visited_hit_drop: 28227
 max_mem_state: 1422
-
+------------------------------
 levels/P4L25
 ##########
 ##dd m a##
@@ -18607,7 +18607,7 @@ num_visited_states: 1848
 num_visited_hit_improve: 0
 num_visited_hit_drop: 17896
 max_mem_state: 273
-
+------------------------------
 levels/P4L26
 ##########
 #db    ###
@@ -18805,7 +18805,7 @@ num_visited_states: 3653
 num_visited_hit_improve: 0
 num_visited_hit_drop: 41695
 max_mem_state: 425
-
+------------------------------
 levels/P4L27
 ##########
 ##########
@@ -18913,7 +18913,7 @@ num_visited_states: 1187
 num_visited_hit_improve: 0
 num_visited_hit_drop: 12271
 max_mem_state: 273
-
+------------------------------
 levels/P4L28
 ##########
 ##  ## ###
@@ -19051,7 +19051,7 @@ num_visited_states: 20125
 num_visited_hit_improve: 0
 num_visited_hit_drop: 177168
 max_mem_state: 7035
-
+------------------------------
 levels/P4L29
 ##########
 #b #   # #
@@ -19319,7 +19319,7 @@ num_visited_states: 17143
 num_visited_hit_improve: 0
 num_visited_hit_drop: 220615
 max_mem_state: 2610
-
+------------------------------
 levels/P4L30
 ##########
 ##########
@@ -19597,7 +19597,7 @@ num_visited_states: 17816
 num_visited_hit_improve: 0
 num_visited_hit_drop: 300050
 max_mem_state: 2032
-
+------------------------------
 levels/P4L31
 ##########
 #nn#####d#
@@ -19785,7 +19785,7 @@ num_visited_states: 2423
 num_visited_hit_improve: 0
 num_visited_hit_drop: 34600
 max_mem_state: 357
-
+------------------------------
 levels/P4L32
 ##########
 #n      b#
@@ -20013,7 +20013,7 @@ num_visited_states: 23609
 num_visited_hit_improve: 0
 num_visited_hit_drop: 364363
 max_mem_state: 2158
-
+------------------------------
 levels/P4L33
 ##########
 #  m  m###
@@ -20161,7 +20161,7 @@ num_visited_states: 2480
 num_visited_hit_improve: 0
 num_visited_hit_drop: 21453
 max_mem_state: 421
-
+------------------------------
 levels/P4L34
 ##########
 #dd      #
@@ -20519,7 +20519,7 @@ num_visited_states: 35304
 num_visited_hit_improve: 0
 num_visited_hit_drop: 620711
 max_mem_state: 3084
-
+------------------------------
 levels/P4L35
 ##########
 #dd# #####
@@ -20757,7 +20757,7 @@ num_visited_states: 8766
 num_visited_hit_improve: 0
 num_visited_hit_drop: 112287
 max_mem_state: 855
-
+------------------------------
 levels/P4L36
 ##########
 #d n  n b#

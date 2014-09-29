@@ -20,6 +20,10 @@ test: convert_test rules_test board_test solve_test
 RESULTS.csv: run.sh solve
 	./run.sh > $@
 
+DETAILED_SOLUTIONS.txt: run_detailed.sh solve
+	./run_detailed.sh $@
+
+
 force_look :
 	true
 
