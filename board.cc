@@ -245,13 +245,13 @@ int State::Move(
   int orig_moving_type = moving_tile->type;
   bool end_of_move = false;
   LOG(1) << board.DebugStringWithState(*n);
+  int num_actions = 0;
   ActionInfo action_infos[4];
   // The (other) tile we are stepping on.
   int tile_on_index = -1;
-  while (!end_of_move) {
+  while (true) {
     // We just landed on curr_pos. We check all the possible rules.
     LOG(2) << "Landed on tile " << curr_pos << endl;
-    int num_actions = 0;
     for (int i = 0; i < 4; ++i) {
       const int lookup_dir = DIR_LOOKUP[dir][i][0];
       const int relation = DIR_LOOKUP[dir][i][1];
@@ -260,7 +260,7 @@ int State::Move(
       if (board.b[lookup_pos] != BLANK) {
         continue;
       }
-      LOG(2) << "checking tile at " << lookup_pos <<  " dir: " << lookup_dir 
+      LOG(2) << "checking tile at " << lookup_pos <<  " dir: " << lookup_dir
              << " rel: " << relation << std::endl;
       int static_tile_index = -1;
       if (relation == Rules::ON) {
@@ -272,13 +272,13 @@ int State::Move(
         static_tile_index = n->Find(lookup_pos);
       }
       if (relation == Rules::AHEAD) {
-        tile_on_index = static_tile_index; 
+        tile_on_index = static_tile_index;
       }
-      if (static_tile_index == -1) continue; 
-      LOG(2) << "tile at " << lookup_pos <<  " dir: " << lookup_dir 
-             << " |" << char('a' + n->t[static_tile_index].type) << "|" 
+      if (static_tile_index == -1) continue;
+      LOG(2) << "tile at " << lookup_pos <<  " dir: " << lookup_dir
+             << " |" << char('a' + n->t[static_tile_index].type) << "|"
              << " rel: " << relation << std::endl;
-      Action a = board.rules.GetAction(moving_tile->type, 
+      Action a = board.rules.GetAction(moving_tile->type,
                                        n->t[static_tile_index].type,
                                        relation);
       if (a.exists) {
@@ -288,42 +288,40 @@ int State::Move(
         ++num_actions;
       }
     }
-    LOG(2) << "Before sort\n";
-    for (int i = 0; i < num_actions; ++i) {
-      LOG(2) << PrintAction(action_infos[i].action);
-    }
-    qsort(action_infos, num_actions, sizeof(ActionInfo), prio_cmp);
-    LOG(2) << "After sort\n";
-    for (int i = 0; i < num_actions; ++i) {
-      LOG(2) << PrintAction(action_infos[i].action);
-    }
-    for (int i = 0; i < num_actions; ++i) {
-      const Action& a = action_infos[i].action;
-      end_of_move = true;
-      LOG(2) << board.DebugStringWithState(*n);
-      n->ApplyAction(moving_tile_index,
-                     action_infos[i].static_tile_index,
-                     a);
-      LOG(2) << board.DebugStringWithState(*n);
-      if (a.lost) return LOSE;
-      if (a.won) return WIN;
-      if (a.moving_new_animal != orig_moving_type) {
-        // Stop applying the rest of the action_infos.
-        break;
-      }
-    }
-    LOG(2) << "end of move: " << (end_of_move ? "Y" : "N") << endl;
-    if (!end_of_move) {
-      // Check that we can make the next move
-      int next_pos = curr_pos + move;
-      if (board.b[next_pos] == BLANK) {
-        LOG(2) << "Moving to " << next_pos << std::endl;
-        moving_tile->pos = next_pos;
-        LOG(2) << board.DebugStringWithState(*n);
-        curr_pos = next_pos;
-      } else {
-        end_of_move = true;
-      }
+    if (num_actions) break;
+
+    int next_pos = curr_pos + move;
+    if (board.b[next_pos] != BLANK) break;
+
+    LOG(2) << "Moving to " << next_pos << std::endl;
+    moving_tile->pos = next_pos;
+    LOG(2) << board.DebugStringWithState(*n);
+    curr_pos = next_pos;
+  }
+
+  LOG(2) << "Before sort\n";
+  for (int i = 0; i < num_actions; ++i) {
+    LOG(2) << PrintAction(action_infos[i].action);
+  }
+  qsort(action_infos, num_actions, sizeof(ActionInfo), prio_cmp);
+  LOG(2) << "After sort\n";
+  for (int i = 0; i < num_actions; ++i) {
+    LOG(2) << PrintAction(action_infos[i].action);
+  }
+
+  for (int i = 0; i < num_actions; ++i) {
+    const Action& a = action_infos[i].action;
+    end_of_move = true;
+    LOG(2) << board.DebugStringWithState(*n);
+    n->ApplyAction(moving_tile_index,
+                   action_infos[i].static_tile_index,
+                   a);
+    LOG(2) << board.DebugStringWithState(*n);
+    if (a.lost) return LOSE;
+    if (a.won) return WIN;
+    if (a.moving_new_animal != orig_moving_type) {
+      // Stop applying the rest of the action_infos.
+      break;
     }
   }
   n->Sort();
