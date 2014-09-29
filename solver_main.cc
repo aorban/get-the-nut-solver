@@ -47,8 +47,8 @@ int main(int argc, char **argv) {
                                          res.end_state.GetHistoryLen());
   if (argc > 1) {
     std::cout
-      << sol.length() << ", "
-      << sol << ", "
+      << res.end_state.GetHistoryLen() << ", "
+      << "\"" << sol << "\", "
       << res.num_moves << ", "
       << res.max_mem_state << ", "
       << res.num_visited_states << ", "

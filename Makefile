@@ -17,6 +17,8 @@ test: convert_test rules_test board_test solve_test
 	./board_test
 	./solve_test
 
+RESULTS.csv: run.sh solve
+	./run.sh > $@
 
 force_look :
 	true
