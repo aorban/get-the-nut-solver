@@ -281,9 +281,6 @@ int State::Move(
       Action a = board.rules.GetAction(moving_tile->type, 
                                        n->t[static_tile_index].type,
                                        relation);
-      if (a.lost) {
-        return LOSE;
-      }
       if (a.exists) {
         LOG(2) << "Added new action" << endl;
         action_infos[num_actions].action = a;
@@ -308,6 +305,7 @@ int State::Move(
                      action_infos[i].static_tile_index,
                      a);
       LOG(2) << board.DebugStringWithState(*n);
+      if (a.lost) return LOSE;
       if (a.won) return WIN;
       if (a.moving_animal_dies || 
           a.moving_new_animal != orig_moving_type) {

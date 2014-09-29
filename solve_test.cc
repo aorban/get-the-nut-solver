@@ -52,4 +52,10 @@ TEST(TestSolve, Solve) {
                 "(3,2)-SQR-R/"
                 "(3,8)-SQR-U/"
                 "(1,8)-SQR-L/"); 
+  CheckSolution(B005, 
+                "(6,3)-HOG-U/"
+                "(3,2)-SQR-D/"
+                "(6,2)-SQR-R/"
+                "(6,8)-SQR-U/"
+                "(1,8)-SQR-L/");
 }
