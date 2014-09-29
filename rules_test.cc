@@ -32,15 +32,34 @@ static inline int MY_intcmp(const void *aa, const void *bb) {
 }
 
 TEST(ActionTest, PrintAction) {
-  Action a;
-  a.moving_new_animal = TILE("SQR");
-  a.static_new_animal = TILE("HOG");
-  a.won = 0;
-  a.lost = 1;
-  a.prio = 3;
-  a.exists = 1;
+  Action a[3];
+  a[0].moving_new_animal = TILE("SQR");
+  a[0].static_new_animal = TILE("HOG");
+  a[0].won = 0;
+  a[0].lost = 1;
+  a[0].prio = 3;
+  a[0].exists = 1;
+  a[1].moving_new_animal = TILE("SQR");
+  a[1].static_new_animal = TILE("ACG");
+  a[1].won = 1;
+  a[1].lost = 0;
+  a[1].prio = 1;
+  a[1].exists = 1;
   EXPECT_EQ("exists/won/lost/prio/movingNew/staticNew:1/0/1/3/b(SQR)/c(HOG)\n",
-            PrintAction(a));
+            PrintAction(a[0]));
+  EXPECT_EQ("exists/won/lost/prio/movingNew/staticNew:1/1/0/1/b(SQR)/a(ACG)\n",
+            PrintAction(a[1]));
+  EXPECT_EQ(
+      "",
+      PrintActions(a, 0));
+  EXPECT_EQ(
+      "0:exists/won/lost/prio/movingNew/staticNew:1/0/1/3/b(SQR)/c(HOG)\n",
+      PrintActions(a, 1));
+  EXPECT_EQ(
+      "0:exists/won/lost/prio/movingNew/staticNew:1/0/1/3/b(SQR)/c(HOG)\n"
+      "1:exists/won/lost/prio/movingNew/staticNew:1/1/0/1/b(SQR)/a(ACG)\n",
+      PrintActions(a, 2));
+
 }
 
 TEST(ActionTest, Sortint) {

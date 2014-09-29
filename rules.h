@@ -16,6 +16,8 @@ struct Action {
 
 std::string PrintAction(const Action& a);
 
+std::string PrintActions(const Action *a, int num_action);
+
 class Rules {
  public:
   static const int NUM_ANIMALS = 20;

@@ -24,6 +24,14 @@ string PrintAction(const Action& a) {
   return ss.str();
 }
 
+string PrintActions(const Action *a, int num_action) {
+  stringstream ss;
+  for (int i = 0; i < num_action; ++i) {
+    ss << i << ":" << PrintAction(a[i]);
+  }
+  return ss.str();
+}
+
 void Rules::Initialize() {
   Action action;
   action.won = 0;
