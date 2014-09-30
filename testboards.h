@@ -21,7 +21,7 @@ static const char B002[] =
 static const char B003[] =
     "##########"
     "# a    # #"
-    "###d     #"
+    "###d   # #"
     "# b      #"
     "#        #"
     "#        #"
