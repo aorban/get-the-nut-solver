@@ -110,6 +110,20 @@ std::string Board::DebugStringNice(const State &state) const {
   return res.str();
 }
 
+std::string Board::DebugStringNiceWithMove(const State &state,
+                                           int tile_index,
+                                           int dir) const {
+  char arrows[] = {'^', '<', '>', 'v'};
+  int shift[] = {-BOARD_X * 6 - 2, -2, 2, BOARD_X * 6 + 2};
+  string board_str = DebugStringNice(state);
+  int pos = state.GetTile(tile_index).pos;
+  int y = pos / BOARD_X;
+  int x = pos % BOARD_X;
+  // Add arrow for move
+  board_str[(y * 4 + 2) * (BOARD_X * 6 + 2) + x * 6 + 3 + shift[dir]] = arrows[dir];
+  return board_str;
+}
+
 // void Board::FloodFrom(int tile, int pos, int nodir) {
 //   int value = dist[tile][pos][nodir];
 //   //printf("pos: %d\n", pos);

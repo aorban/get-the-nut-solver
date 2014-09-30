@@ -37,8 +37,6 @@ typedef std::map<State::HashValue, int, State::CmpByHash> VisitedMap;
 
 std::string ReplaySolution(const Board& b, const State& start_state,
                            const State::HistoryItem* history, int history_len) {
-  char arrows[] = {'^', '<', '>', 'V'};
-  int shift[] = {-BOARD_X * 6 - 2, -2, 2, BOARD_X * 6 + 2};
   std::stringstream ss;
   State* states = new State[history_len + 1];
   states[0] = start_state;
@@ -51,12 +49,9 @@ std::string ReplaySolution(const Board& b, const State& start_state,
        << CodeToTri('a' + type) << "-"
          << State::DIRNAME[history[i].dir];
     ss << move.str() << "/";
-    string board_str = b.DebugStringNice(states[i]);
-    // Add arrow for move
-    int dir = history[i].dir;
-    int y = pos / BOARD_X;
-    int x = pos % BOARD_X;
-    board_str[(y * 4 + 2) * (BOARD_X * 6 + 2) + x * 6 + 3 + shift[dir]] = arrows[dir];
+    string board_str = b.DebugStringNiceWithMove(states[i], 
+                                                 history[i].tile_index,
+                                                 history[i].dir);
     LOG(0) << move.str() << endl;
     LOG(0) << board_str << endl;
 

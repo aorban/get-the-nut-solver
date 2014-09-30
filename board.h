@@ -116,6 +116,9 @@ class Board {
   std::string DebugString() const;
   std::string DebugStringWithState(const State &s) const;
   std::string DebugStringNice(const State &state) const;
+  std::string DebugStringNiceWithMove(const State &state,
+                                      int tile_index,
+                                      int dir) const;
   std::string DebugStringWithDistance(int pos) const;
 
   // The minimum number of moves required from state.
