@@ -82,7 +82,7 @@ class State {
   int NumTiles() const { return num_tiles; }
   const Tile& GetTile(int index) const { return t[index]; }
 
-  unsigned int GetSquirrelPos() const { return t[0].pos; }
+  unsigned int GetSquirrelPos() const { return t[1].pos; }
 
   const HistoryItem *GetHistory() const;
   int GetHistoryLen() const;
@@ -119,30 +119,21 @@ class Board {
   std::string DebugStringNiceWithMove(const State &state,
                                       int tile_index,
                                       int dir) const;
-  std::string DebugStringWithDistance(int pos) const;
+  std::string DebugStringWithDistance() const;
 
   // The minimum number of moves required from state.
   int MinMovesFrom(const State &state) const;
-
- protected:
-  int ***Dist() { return (int***)dist; }
 
  private:
   friend class State;
   Cell b[BOARD_Y * BOARD_X];  // Board.
   const Rules& rules;
 
-  // Info used for lower bound on remaining steps to goal.
-  struct MinMoveInfo {
-    // Minimum steps for the squirrel if it could move as a rook.
-    int squirrel_step;
-    // 0-1 valued. Indicates cells that block all paths to goal.
-    int is_blocking[BOARD_Y * BOARD_X];
-  };
-  // For each possible squirrel position.
-  MinMoveInfo dist[BOARD_Y * BOARD_X];
+  int dist[BOARD_X * BOARD_Y];
 
-  /* void ComputeDistances(int tile, int dir); */
+  // Compute minimum number of moves to reash golden acorn.
+  void ComputeDistances(int acg_pos);
+
   /* void FloodFrom(int tile, int pos, int dir); */
   /* int FindMinimum(int tile, int dir); */
 

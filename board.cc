@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <iostream>
+#include <queue>
 #include <sstream>
 #include <stddef.h>
 #include <stdlib.h>
@@ -18,11 +19,13 @@ static const int INFINITY = 1000;
 ////////////////////////////////////////////////////////////////////////////////
 
 Board::Board(const char *p, const Rules& rules_) : rules(rules_) {
+  int acg_pos = -1;
   for (int i = 0; i < BOARD_Y * BOARD_X; ++i) {
     const char c = p[i];
     b[i] = c == '#' ? '#' : BLANK;
+    if (c == TriToCode("ACG")) acg_pos = i;
   }
-  // ComputeDistances(i, dir);
+  ComputeDistances(acg_pos);
 }
 
 std::string Board::DebugString() const {
@@ -33,26 +36,26 @@ std::string Board::DebugStringWithState(const State &s) const {
   return DebugString(&s);
 }
 
-// std::string Board::DebugStringWithDistance(int tile, int dir) const {
-//   std::string s;
-//   int pos = 0;
-//   for (int y = 0; y < BOARD_Y; ++y) {
-//     for (int x = 0; x < BOARD_X; ++x, ++pos) {
-//       char c = b[pos];
-//       if (c == BLANK) {
-//         int d = dist[tile][pos][dir];
-//         if (d == INFINITY) {
-//           c = '-';
-//         } else {
-//           c = char(d) + '0';
-//         }
-//       }
-//       s += c;
-//     }
-//     s += '\n';
-//   }
-//   return s;
-// }
+std::string Board::DebugStringWithDistance() const {
+  std::string s;
+  int pos = 0;
+  for (int y = 0; y < BOARD_Y; ++y) {
+    for (int x = 0; x < BOARD_X; ++x, ++pos) {
+      char c = b[pos];
+      if (c == BLANK) {
+        int d = dist[pos];
+        if (d == INFINITY) {
+          c = '-';
+        } else {
+          c = char(d) + '0';
+        }
+      }
+      s += c;
+    }
+    s += '\n';
+  }
+  return s;
+}
 
 std::string Board::DebugString(const State *state) const {
   std::string s;
@@ -156,28 +159,39 @@ std::string Board::DebugStringNiceWithMove(const State &state,
 //   return minpos;
 // }
 
-// void Board::ComputeDistances(int tile, int dir) {
-//   // int dist[MAX_TILES][BOARD_Y * BOARD_X][4];  // Minimum distances.
-//   for (int i = 0; i < BOARD_SIZE; ++i) {
-//     dist[tile][i][dir] = INFINITY;
-//   }
-//   int pos = goal.t[tile];
-//   dist[tile][pos][dir] = 0;
-//   //printf("----------------------tile: %d, pos: %d, dir:%d\n", tile, pos, dir);
-//   do {
-//     FloodFrom(tile, pos, dir);
-//     pos = FindMinimum(tile, dir);
-//   } while (pos >= 0);
-// }
+void Board::ComputeDistances(int acg_pos) {
+  for (int i = 0; i < BOARD_SIZE; ++i) {
+    dist[i] = INFINITY;
+  }
+  if (acg_pos < 0) return;
+  std::queue<int> q;
+  dist[acg_pos] = 0;
+  for (int i = 0; i < 4; ++i) {
+    int pos = acg_pos + State::DIRECTIONS[i];
+    if (b[pos] != '#') {
+      dist[pos] = 0;
+      q.push(pos);
+    }
+  }
+  while (!q.empty()) {
+    int tile_pos = q.front();
+    q.pop();
+    int next_dist = dist[tile_pos] + 1;
+    for (int di = 0; di < 4; ++di) {
+      int dir = State::DIRECTIONS[di];
+      int pos = tile_pos + dir;
+      while(b[pos] != '#' && dist[pos] >= next_dist) {
+        dist[pos] = next_dist;
+        q.push(pos);
+        pos += dir;
+      }
+    }
+  }
+}
 
 int Board::MinMovesFrom(const State &state) const {
   return 0;
-  int squirrel_pos = state.GetSquirrelPos();
-  int num_blocking = 0;
-  for (int i = 0; i < state.NumTiles(); ++i) {
-    num_blocking += dist[squirrel_pos].is_blocking[state.t[i].pos];
-  }
-  return num_blocking + dist[squirrel_pos].squirrel_step;
+  return dist[state.GetSquirrelPos()];
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -194,21 +194,21 @@ TEST(TestBoard, DebugString) {
   State s(B004);
   EXPECT_EQ(
     "##########\n"
-    "#        #\n"                   
-    "#        #\n"                   
-    "#      # #\n"                   
-    "#        #\n"                   
-    "#  #     #\n"                   
-    "#        #\n"                   
+    "#        #\n"
+    "#        #\n"
+    "#      # #\n"
+    "#        #\n"
+    "#  #     #\n"
+    "#        #\n"
     "##########\n", b.DebugString());
   EXPECT_EQ(
     "##########\n"
-    "#     abc#\n"                   
-    "#     abc#\n"                   
-    "#      # #\n"                   
-    "#        #\n"                   
-    "#  #     #\n"                   
-    "# abc    #\n"                   
+    "#     abc#\n"
+    "#     abc#\n"
+    "#      # #\n"
+    "#        #\n"
+    "#  #     #\n"
+    "# abc    #\n"
     "##########\n", b.DebugStringWithState(s));
   EXPECT_EQ(
             "|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|\n"
@@ -389,6 +389,27 @@ TEST(TestBoard, DebugString) {
             "-------------------------------------------------------------\n"
             , b.DebugStringNiceWithMove(s, 8, State::DOWN));
 
+}
+
+TEST(TestBoard, DebugStringWithDistance) {
+  Board b(
+    "##########"
+    "# #  d#  #"
+    "#   # f  #"
+    "#######  #"
+    "# j  a   #"
+    "#  #   c #"
+    "#    #   #"
+    "##########", *RULES);
+  EXPECT_EQ(
+    "##########\n"
+    "#8#554#22#\n"
+    "#776#3322#\n"
+    "#######22#\n"
+    "#11100011#\n"
+    "#22#10111#\n"
+    "#2221#122#\n"
+    "##########\n", b.DebugStringWithDistance());
 }
 
 // TEST(TestBoard, MinMovesFromSimple) {
