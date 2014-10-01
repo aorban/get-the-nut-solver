@@ -190,7 +190,6 @@ void Board::ComputeDistances(int acg_pos) {
 }
 
 int Board::MinMovesFrom(const State &state) const {
-  return 0;
   return dist[state.GetSquirrelPos()];
 }
 
