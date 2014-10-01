@@ -38,19 +38,26 @@ typedef std::map<State::HashValue, int, State::CmpByHash> VisitedMap;
 std::string ReplaySolution(const Board& b, const State& start_state,
                            const State::HistoryItem* history, int history_len) {
   std::stringstream ss;
-  LOG(0) << b.DebugStringWithState(start_state) << endl;
   State* states = new State[history_len + 1];
   states[0] = start_state;
   for (int i = 0; i < history_len; ++i) {
     const Tile& moving_tile = states[i].GetTile(history[i].tile_index);
     int pos = moving_tile.pos;
     int type = moving_tile.type;
-    ss << "(" << pos / BOARD_X << "," << pos % BOARD_X << ")-"
+    std::stringstream move;
+    move << "(" << pos / BOARD_X << "," << pos % BOARD_X << ")-"
        << CodeToTri('a' + type) << "-"
-       << State::DIRNAME[history[i].dir] << "/";
+         << State::DIRNAME[history[i].dir];
+    ss << move.str() << "/";
+    string board_str = b.DebugStringNiceWithMove(states[i], 
+                                                 history[i].tile_index,
+                                                 history[i].dir);
+    LOG(0) << move.str() << endl;
+    LOG(0) << board_str << endl;
+
     states[i].Move(b, history[i].tile_index, history[i].dir, &states[i + 1]);
-    LOG(0) << b.DebugStringWithState(states[i + 1]) << endl;
   }
+  LOG(0) <<  b.DebugStringNice(states[history_len]);
   delete states;
   return ss.str();
 }

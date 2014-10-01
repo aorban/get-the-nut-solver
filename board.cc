@@ -80,6 +80,50 @@ std::string Board::DebugString(const State *state) const {
   return s;
 }
 
+std::string Board::DebugStringNice(const State &state) const {
+  std::stringstream res;
+  int pos = 0;
+  for (int y = 0; y < BOARD_Y; ++y) {
+    std::stringstream ss[4];
+    for (int x = 0; x < BOARD_X; ++x, ++pos) {
+      ss[0] << "|-----";
+      ss[1] << "|     ";
+      ss[3] << "|     ";
+      char c = b[pos];
+      int index = state.Find(pos);
+      if (index != -1) {
+        c = 'a' + state.t[index].type;
+        ss[2] << "| " << CodeToTri(c) << " ";
+      } else if (c == BLANK) {
+        ss[2] << "|     ";
+      } else {
+        ss[2] << "| ### ";
+      }
+    }
+    ss[0] << "|\n";
+    ss[1] << "|\n";
+    ss[2] << "|\n";
+    ss[3] << "|\n";
+    res << ss[0].str() << ss[1].str() << ss[2].str() << ss[3].str();
+  }
+  res << string(BOARD_X * 6 + 1, '-') << "\n";
+  return res.str();
+}
+
+std::string Board::DebugStringNiceWithMove(const State &state,
+                                           int tile_index,
+                                           int dir) const {
+  char arrows[] = {'^', '<', '>', 'v'};
+  int shift[] = {-BOARD_X * 6 - 2, -2, 2, BOARD_X * 6 + 2};
+  string board_str = DebugStringNice(state);
+  int pos = state.GetTile(tile_index).pos;
+  int y = pos / BOARD_X;
+  int x = pos % BOARD_X;
+  // Add arrow for move
+  board_str[(y * 4 + 2) * (BOARD_X * 6 + 2) + x * 6 + 3 + shift[dir]] = arrows[dir];
+  return board_str;
+}
+
 // void Board::FloodFrom(int tile, int pos, int nodir) {
 //   int value = dist[tile][pos][nodir];
 //   //printf("pos: %d\n", pos);
@@ -148,30 +192,31 @@ const int State::DOWN;
 const char State::DIRNAME[] = "ULRD";
 const int State::DIRECTIONS[] = {-BOARD_X, -1, +1, +BOARD_X};  // 3-dir must work!
 
+// ON must be first, after that starting from UP and then clockwise.
 const int State::DIR_LOOKUP[][4][2] = {
   {  // up
     {0, Rules::ON},  // on
     {DIRECTIONS[State::UP], Rules::AHEAD},  // ahead
-    {DIRECTIONS[State::LEFT], Rules::SIDE}, // side
     {DIRECTIONS[State::RIGHT], Rules::SIDE}, // side
+    {DIRECTIONS[State::LEFT], Rules::SIDE}, // side
   },
   {  // left
     {0, Rules::ON},  // on
-    {DIRECTIONS[State::LEFT], Rules::AHEAD},  // ahead
     {DIRECTIONS[State::UP], Rules::SIDE}, // side
     {DIRECTIONS[State::DOWN], Rules::SIDE}, // side
+    {DIRECTIONS[State::LEFT], Rules::AHEAD},  // ahead
   },
   {  // right
     {0, Rules::ON},  // on
-    {DIRECTIONS[State::RIGHT], Rules::AHEAD},  // ahead
     {DIRECTIONS[State::UP], Rules::SIDE}, // side
+    {DIRECTIONS[State::RIGHT], Rules::AHEAD},  // ahead
     {DIRECTIONS[State::DOWN], Rules::SIDE}, // side
   },
   {  // down
     {0, Rules::ON},  // on
+    {DIRECTIONS[State::RIGHT], Rules::SIDE}, // side
     {DIRECTIONS[State::DOWN], Rules::AHEAD},  // ahead
     {DIRECTIONS[State::LEFT], Rules::SIDE}, // side
-    {DIRECTIONS[State::RIGHT], Rules::SIDE}, // side
   },
 };
 
@@ -224,8 +269,13 @@ struct ActionInfo {
 };
 
 inline int prio_cmp(const void* a, const void* b) {
-  return ((ActionInfo*)a)->action.prio - ((ActionInfo*)b)->action.prio;
+  return ((ActionInfo*)a)->action.prio - ((ActionInfo*)b)->action.prio 
+    ? ((ActionInfo*)a)->action.prio - ((ActionInfo*)b)->action.prio
+    // Makes it stable.
+    : ((ActionInfo*)a-(ActionInfo*)b);
 }
+
+
 
 int State::Move(
     const Board &board, int moving_tile_index, int dir, State *n) const {
@@ -248,6 +298,7 @@ int State::Move(
   ActionInfo action_infos[4];
   // The (other) tile we are stepping on.
   int tile_on_index = -1;
+  int num_woves_around_bear = 0;
   while (true) {
     // We just landed on curr_pos. We check all the possible rules.
     LOG(2) << "Landed on tile " << curr_pos << endl;
@@ -285,6 +336,10 @@ int State::Move(
         action_infos[num_actions].action = a;
         action_infos[num_actions].static_tile_index = static_tile_index;
         ++num_actions;
+        if (strcmp(CodeToTri('a' + moving_tile->type), "BER") == 0 &&
+            strcmp(CodeToTri('a' + n->t[static_tile_index].type), "WLF") == 0) {
+          ++num_woves_around_bear;
+        }
       }
     }
     if (num_actions) break;
@@ -298,31 +353,39 @@ int State::Move(
     curr_pos = next_pos;
   }
 
-  LOG(2) << "Before sort\n";
-  for (int i = 0; i < num_actions; ++i) {
-    LOG(2) << PrintAction(action_infos[i].action);
-  }
-  qsort(action_infos, num_actions, sizeof(ActionInfo), prio_cmp);
-  LOG(2) << "After sort\n";
-  for (int i = 0; i < num_actions; ++i) {
-    LOG(2) << PrintAction(action_infos[i].action);
-  }
-
-  for (int i = 0; i < num_actions; ++i) {
-    const Action& a = action_infos[i].action;
-    const int &static_tile_index = action_infos[i].static_tile_index;
-    LOG(2) << board.DebugStringWithState(*n);
-    if (a.lost) return LOSE;
-    if (a.won) return WIN;
-    LOG(1) << "ApplyAction: " << moving_tile_index << " " << static_tile_index << endl;
-    LOG(1) << PrintAction(a);
-    int orig_moving_type = moving_tile->type;
-    n->t[moving_tile_index].type = a.moving_new_animal;
-    n->t[static_tile_index].type = a.static_new_animal;
-    LOG(2) << board.DebugStringWithState(*n);
-    if (a.moving_new_animal != orig_moving_type) {
-      // Stop applying the rest of the action_infos.
-      break;
+  // Special case when bear is surrounded by wolves
+  if (num_woves_around_bear == 3) {
+    LOG(-5) << "BEAR SURROUNDED!" << endl;
+    moving_tile->type = TriToCode("END") - 'a';
+  } else {
+    // Sort actions by prio
+    LOG(2) << "Before sort\n";
+    for (int i = 0; i < num_actions; ++i) {
+      LOG(2) << PrintAction(action_infos[i].action);
+    }
+    qsort(action_infos, num_actions, sizeof(ActionInfo), prio_cmp);
+    LOG(2) << "After sort\n";
+    for (int i = 0; i < num_actions; ++i) {
+      LOG(2) << PrintAction(action_infos[i].action);
+    }
+    // Apply actions
+    for (int i = 0; i < num_actions; ++i) {
+      const Action& a = action_infos[i].action;
+      const int &static_tile_index = action_infos[i].static_tile_index;
+      LOG(2) << board.DebugStringWithState(*n);
+      if (a.lost) return LOSE;
+      if (a.won) return WIN;
+      LOG(1) << "ApplyAction: " << moving_tile_index << " " 
+             << static_tile_index << endl;
+      LOG(1) << PrintAction(a);
+      int orig_moving_type = moving_tile->type;
+      n->t[moving_tile_index].type = a.moving_new_animal;
+      n->t[static_tile_index].type = a.static_new_animal;
+      LOG(2) << board.DebugStringWithState(*n);
+      if (a.moving_new_animal != orig_moving_type) {
+        // Stop applying the rest of the action_infos.
+        break;
+      }
     }
   }
   n->Sort();
