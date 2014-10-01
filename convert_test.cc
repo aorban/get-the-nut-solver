@@ -5,6 +5,7 @@
 TEST(ConvertTest, Simple) {
   EXPECT_LE('p', TriToCode("END"));
   EXPECT_EQ('a', TriToCode("ACG"));
+  EXPECT_EQ('b', TriToCode("SQR"));
 }
 
 TEST(ConvertTest, Death) {
