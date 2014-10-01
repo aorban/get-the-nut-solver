@@ -1,8 +1,8 @@
-#ifndef GTN_LOG_H_
-#define GTN_LOG_H_
+#ifndef DEBUG
+#define DEBUG -1
+#endif
 
-#define DEBUG 0
-
+namespace {
 class Voidify {
  public:
   Voidify() { }
@@ -10,6 +10,6 @@ class Voidify {
   // higher than ?:
   void operator&(std::ostream&) {}
 };
-#define LOG(x) (x > DEBUG) ? (void)0 : Voidify() & std::cout
+}  // namespace
 
-#endif
+#define LOG(x) (x > DEBUG) ? (void)0 : Voidify() & std::cout
