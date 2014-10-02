@@ -312,6 +312,7 @@ int State::Move(
   // The (other) tile we are stepping on.
   int tile_on_index = -1;
   int num_woves_around_bear = 0;
+  bool has_moved = false;
   while (true) {
     // We just landed on curr_pos. We check all the possible rules.
     LOG(2) << "Landed on tile " << curr_pos << endl;
@@ -364,7 +365,10 @@ int State::Move(
     moving_tile->pos = next_pos;
     LOG(2) << board.DebugStringWithState(*n);
     curr_pos = next_pos;
+    has_moved = true;
   }
+  // No actions on the start position.
+  if (!has_moved) return 0;
 
   // Special case when bear is surrounded by wolves
   if (num_woves_around_bear == 3) {
