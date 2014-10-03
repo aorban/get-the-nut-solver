@@ -5,7 +5,8 @@
 #include <vector>
 
 struct Action {
-  unsigned int dummy_ : 11;
+  unsigned int dummy_ : 3;
+  unsigned int static_old_animal : 8;
   unsigned int moving_new_animal : 8;
   unsigned int static_new_animal : 8;
   unsigned int won : 1;

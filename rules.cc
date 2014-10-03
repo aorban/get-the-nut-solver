@@ -52,6 +52,7 @@ void Rules::Initialize() {
             *((unsigned int *)&(rules[a1][a2][r])) = 0;
           } else {
             // Not SWAMP.
+            action.static_old_animal = a2;
             action.moving_new_animal = a1;
             action.static_new_animal = a2;
             rules[a1][a2][r] = action;
@@ -100,6 +101,7 @@ Rules::Rules(const std::string& csv_file) {
       cout << "Wrong animal1: " << values[2] << '/' << line << endl;
       exit(3);
     }
+    action.static_old_animal = animal2;
     action.static_new_animal = animal2;
 
     const string a1 = values[4];
@@ -148,6 +150,7 @@ Rules::Rules(const std::string& csv_file) {
         int tmp = action.moving_new_animal;
         action.moving_new_animal = action.static_new_animal;
         action.static_new_animal = tmp;
+        action.static_old_animal = animal1;
       }
       for (vector<int>::const_iterator i = relations.begin();
            i != relations.end(); ++i) {
