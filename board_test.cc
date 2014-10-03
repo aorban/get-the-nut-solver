@@ -837,6 +837,39 @@ TEST(TestState, MoveMultiActionHighIndex) {
   }
 }
 
+TEST(TestState, Move_NoMoveNoAction) {
+  const char B[] =
+    "##########"
+    "#    c   #"
+    "#        #"
+    "#        #"
+    "# c  ac  #"
+    "#        #"
+    "#        #"
+    "##########";
+  Board b(B, *RULES);
+  State s(B);
+  // Can't move down or up or right. No move->no action.
+  {
+    State n(b, s, 0, State::DOWN);
+    EXPECT_EQ(4, n.NumTiles());
+  }
+  {
+    State n(b, s, 0, State::RIGHT);
+    EXPECT_EQ(4, n.NumTiles());
+  }
+  {
+    State n(b, s, 0, State::UP);
+    EXPECT_EQ(4, n.NumTiles());
+  }
+  // Move -> action.
+  {
+    State n(b, s, 0, State::LEFT);
+    EXPECT_EQ(3, n.NumTiles()) << b.DebugStringWithState(n);
+  }
+}
+
+
 
 // TEST(TestState, MoveHorizontalFixed) {
 //   {
