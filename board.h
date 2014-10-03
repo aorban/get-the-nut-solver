@@ -134,9 +134,6 @@ class Board {
   // Compute minimum number of moves to reash golden acorn.
   void ComputeDistances(int acg_pos);
 
-  /* void FloodFrom(int tile, int pos, int dir); */
-  /* int FindMinimum(int tile, int dir); */
-
   std::string DebugString(const State *state) const;
 };
 

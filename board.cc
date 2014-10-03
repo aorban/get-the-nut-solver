@@ -127,38 +127,6 @@ std::string Board::DebugStringNiceWithMove(const State &state,
   return board_str;
 }
 
-// void Board::FloodFrom(int tile, int pos, int nodir) {
-//   int value = dist[tile][pos][nodir];
-//   //printf("pos: %d\n", pos);
-//   //printf("value:%d\n", value);
-//   for (int di = 0; di < 4; ++di) {
-//     if (di == OPPOSITE(nodir)) continue;
-//     int d = State::DIRECTIONS[di];
-//     //printf("pos: %d, nodir: %d, dir: %d\n", pos, nodir, d);
-//     int next_pos = pos + d;
-//     if (b[next_pos] == BLANK && dist[tile][next_pos][nodir] == INFINITY) {
-//       dist[tile][next_pos][nodir] = value;
-//       FloodFrom(tile, next_pos, nodir);
-//     }
-//   }
-// }
-
-// int Board::FindMinimum(int tile, int dir) {
-//   int min = INFINITY;
-//   int minpos = -1;
-//   for (int pos = BOARD_X; pos < BOARD_SIZE - BOARD_X; ++pos) {
-//     const int nextpos = pos + State::DIRECTIONS[dir];
-//     if (b[pos] == BLANK && b[nextpos] == BLANK &&
-//         dist[tile][pos][dir] == INFINITY &&
-//         dist[tile][nextpos][dir] < min) {
-//       min = dist[tile][nextpos][dir];
-//       minpos = pos;
-//     }
-//   }
-//   if (minpos >= 0) dist[tile][minpos][dir] = min + 1;
-//   return minpos;
-// }
-
 void Board::ComputeDistances(int acg_pos) {
   for (int i = 0; i < BOARD_SIZE; ++i) {
     dist[i] = INFINITY;

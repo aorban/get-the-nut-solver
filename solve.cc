@@ -33,7 +33,6 @@ static const int MOVEABLE[] = {
 };
 
 typedef std::map<State::HashValue, int, State::CmpByHash> VisitedMap;
-//typedef boost::asio::detail::hash_map<long long, int> VisitedMap;
 
 std::string ReplaySolution(const Board& b, const State& start_state,
                            const State::HistoryItem* history, int history_len) {

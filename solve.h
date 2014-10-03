@@ -5,8 +5,6 @@
 #include <set>
 #include <string>
 
-//#include "hash_map.hpp"
-
 #include "board.h"
 
 static const int MAX_MOVES = 100;
