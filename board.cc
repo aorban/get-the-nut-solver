@@ -305,13 +305,13 @@ int State::Move(
     n->history[n->history_len++] = hist;
   }
   Tile* moving_tile = &(n->t[moving_tile_index]);
+  if (board.b[moving_tile->pos + DIRECTIONS[dir]] != BLANK) return 0;
   int curr_pos = moving_tile->pos;
   LOG(1) << board.DebugStringWithState(*n);
   int num_actions = 0;
   ActionInfo action_infos[4];
   // The (other) tile we are stepping on.
   int tile_on_index = -1;
-  int num_woves_around_bear = 0;
   bool has_moved = false;
   while (true) {
     // We just landed on curr_pos. We check all the possible rules.
@@ -350,10 +350,6 @@ int State::Move(
         action_infos[num_actions].action = a;
         action_infos[num_actions].static_tile_index = static_tile_index;
         ++num_actions;
-        if (strcmp(CodeToTri('a' + moving_tile->type), "BER") == 0 &&
-            strcmp(CodeToTri('a' + n->t[static_tile_index].type), "WLF") == 0) {
-          ++num_woves_around_bear;
-        }
       }
     }
     if (num_actions) break;
@@ -369,6 +365,15 @@ int State::Move(
   }
   // No actions on the start position.
   if (!has_moved) return 0;
+
+  int num_woves_around_bear = 0;
+  if (num_actions >=3 &&
+      strcmp(CodeToTri('a' + moving_tile->type), "BER") == 0) {
+    for (int i = 0; i < num_actions; ++i) {
+      if (action_infos[i].action.static_old_animal == TriToCode("WLF") - 'a')
+        ++num_woves_around_bear;
+    }
+  }
 
   // Special case when bear is surrounded by wolves
   if (num_woves_around_bear == 3) {
