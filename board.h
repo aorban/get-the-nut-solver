@@ -140,13 +140,4 @@ class Board {
   std::string DebugString(const State *state) const;
 };
 
-inline int MoveFromChar(char di) {
-  switch(di) {
-    case 'U': return 0;
-    case 'L': return 1;
-    case 'R': return 2;
-    default: return 3;
-  }
-}
-
 #endif
