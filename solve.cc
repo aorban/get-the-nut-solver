@@ -11,7 +11,6 @@
 #include "solve.h"
 
 #define STATS true
-#define DEBUG 1
 
 using namespace std;
 
