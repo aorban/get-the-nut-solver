@@ -48,13 +48,13 @@ int main(int argc, char **argv) {
                                          res.end_state.GetHistoryLen());
   if (argc > 1) {
     std::cout
-      << res.end_state.GetHistoryLen() << ", "
-      << "\"" << sol << "\", "
-      << res.num_moves << ", "
-      << res.max_mem_state << ", "
-      << res.num_visited_states << ", "
-      << res.num_visited_hit_improve << ", "
-      << res.num_visited_hit_drop << ", "
+      << res.end_state.GetHistoryLen() << ","
+      << "\"" << sol << "\","
+      << res.num_moves << ","
+      << res.max_mem_state << ","
+      << res.num_visited_states << ","
+      << res.num_visited_hit_improve << ","
+      << res.num_visited_hit_drop << ","
       << std::endl;
     return 0;
   }
