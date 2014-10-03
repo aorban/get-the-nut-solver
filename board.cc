@@ -418,7 +418,7 @@ void State::Hash(HashValue hash) const {
   int idx_hash = 0;
   while (idx_tile < num_tiles) {
     for (int i = 0; i < 6; ++i) {
-      int local_hash = (t[idx_tile].type << 4) + t[idx_tile].pos - BOARD_X;
+      int local_hash = (t[idx_tile].type << 6) + t[idx_tile].pos - BOARD_X;
       hash[idx_hash] <<= 10;
       hash[idx_hash] += local_hash;
       if (++idx_tile >= num_tiles) break;
