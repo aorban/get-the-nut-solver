@@ -11,6 +11,7 @@
 #include "solve.h"
 
 #define STATS true
+#define DEBUG 1
 
 using namespace std;
 
@@ -49,7 +50,7 @@ std::string ReplaySolution(const Board& b, const State& start_state,
        << CodeToTri('a' + type) << "-"
          << State::DIRNAME[history[i].dir];
     ss << move.str() << "/";
-    string board_str = b.DebugStringNiceWithMove(states[i], 
+    string board_str = b.DebugStringNiceWithMove(states[i],
                                                  history[i].tile_index,
                                                  history[i].dir);
     LOG(0) << move.str() << endl;
@@ -104,7 +105,7 @@ SolveResult solve(const Board& board, const State& start_state) {
     }
     // Handle next state in group.
     const State* curr_state = state_groups[min_moves].Pop();
-    LOG(1) << "curr state : " << min_moves << "\n" 
+    LOG(2) << "curr state : " << min_moves << "\n"
            << board.DebugStringWithState(*curr_state) << endl;
     if (STATS) { --ss; }
     const int history_len = curr_state->GetHistoryLen();
@@ -129,16 +130,16 @@ SolveResult solve(const Board& board, const State& start_state) {
         // Compute min_moves
         int new_min_moves =
           history_len + 1 + board.MinMovesFrom(*new_state);
-        LOG(1) << "new min moves:" << new_min_moves << endl;
+        LOG(2) << "new min moves:" << new_min_moves << endl;
         //assert(new_min_moves >= min_moves);
         // Check if the new state has already been seen.
         State::HashValue new_hash = new unsigned long long[State::HASH_SIZE];
         new_state->Hash(new_hash);
-        LOG(1) << "new hash:" << new_hash[0] << new_hash[1] << endl;
+        LOG(2) << "new hash:" << new_hash[0] << new_hash[1] << endl;
         VisitedMap::iterator it = visited_states.find(new_hash);
         if (it != visited_states.end()) {
           // state already visited
-          LOG(1) << "State visited\n";
+          LOG(2) << "State visited\n";
           int prev_min_moves = it->second;
           if (prev_min_moves > new_min_moves) {
             // found state is in a bigger group, remove from that group.
@@ -152,7 +153,7 @@ SolveResult solve(const Board& board, const State& start_state) {
             continue;
           }
         }
-        LOG(1) << "NEW State with min moves" << new_min_moves << endl;
+        LOG(2) << "NEW State with min moves" << new_min_moves << endl;
         // We need to keep this new state and insert it in its group.
         state_groups[new_min_moves].AddState(new_state);
         if (STATS) { ++ss; if (ss > res.max_mem_state) res.max_mem_state = ss; }
